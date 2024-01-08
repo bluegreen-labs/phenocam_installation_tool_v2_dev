@@ -1,0 +1,69 @@
+# PhenoCam Installation Tool (PIT)
+
+PhenoCam Installation Tool (PIT) is a set of scripts for Linux/Mac OSX and Windows taking care of the settings as needed by cameras installed by or associated with the [PhenoCam network](http://phenocam.nau.edu).
+
+## Installation
+
+### hardware prerequisites
+
+Please connect a computer and the PhenoCam to the same (wireless) router which has internet access. Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
+
+![](./diagram.svg)
+
+The easiest way to find the camera’s IP address is to install [StarDot Tools](http://www.stardot.com/downloads). Run the StarDot Tools program and click “refresh”. The camera should be detected and the camera’s IP address shown (you may have to run Tools as administrator in Windows, depending on your settings).
+
+If you are configuring your camera with a non-Windows computer there are other things you can do to find the IP address of the camera. From a Linux or Mac OS X terminal window you should be able to type the following commands (assuming `192.168.1.255` is the network broadcast address reported by `ifconfig`):
+
+```bash
+ping -c 3 -b 192.168.1.255
+arp -a
+```
+
+to get a list of the MAC addresses and IP’s of all the computers on the local network. The StarDot cameras have a MAC address that starts with 00:30 so you may be able to find the camera that way. Again, you may need help from the local network administrator for this step.
+
+### software prerequisites
+
+For the script to run successfully you will need an `ssh` client and bash support, these are included in both MacOS and Linux default installs and can be provided in Windows by [using the linux subsystem](https://learn.microsoft.com/en-us/windows/wsl/install). 
+
+You can download this required repository by either a direct download of a [zip file](https://github.com/bluegreen-labs/phenocam_installation_tool/archive/refs/heads/netcamlive.zip), or if you have git running by cloning the branch with:
+
+```bash
+git clone -b netcamlive https://github.com/bluegreen-labs/phenocam_installation_tool.git
+```
+
+In the (unzipped) project directory you can then execute the below commands. The installation tool uses the following syntax
+
+```bash
+./PIT.sh IP PASSWORD CAMERA TIME_OFFSET TZ CRON_START CRON_END CRON_INT
+```
+
+with:
+
+| Parameter     | Description |
+| ------------- | ------------------------------ |
+| IP            | ip address of the camera |
+| PASSWORD      | user password (on a new Stardot NetCam this is admin) |
+| CAMERA        | the name of the camera / site |
+| TIME_OFFSET   | difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC) |
+| TZ            | a text string corresponding to the local time zone (e.g. EST) |
+| CRON_START    | first hour of the scheduled image acquisitions (e.g. 4 in the morning) |
+| CRON_END      | last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation) |
+| CRON_INT      | interval at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
+| [all parameters are required!] | |
+
+An example of our in lab test camera configuration:
+
+```bash
+./PIT.sh 140.247.89.xx password testcam3 -5 EST 4 22 30
+```
+
+## DEV NOTES
+
+Currently the install scripts in sofar that it configures most of the functions, permissions are understood and a basic jpeg upload should work on the preset schedule.
+
+What doesn't work is the previous upload routine:
+
+- [ ] Triggering the IR filter
+- [ ] The overlay
+- [ ] Grabbing and converting raw frames (converting to jpeg and uploading)
+
