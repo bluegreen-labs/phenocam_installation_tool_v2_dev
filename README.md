@@ -1,6 +1,10 @@
-# PhenoCam Installation Tool (PIT)
+# PhenoCam Installation Tool (PIT) v2
 
 PhenoCam Installation Tool (PIT) is a set of scripts for Linux/Mac OSX and Windows taking care of the settings as needed by cameras installed by or associated with the [PhenoCam network](http://phenocam.nau.edu).
+
+This software is provided under a perpetual license to the PhenoCam network. All other users require **permission and a negotiated contract** from the copyright holder, BlueGreen labs, for the use of this software. Use without permission or reverse engineering of the tool is considered a violation of copyright and will be prosecuted.
+
+Version 2 addresses the installation routine for the NetcamLive2 cameras which supercede the previous default Netcam SC5 cameras within the Phenocam network.
 
 ## Installation
 
