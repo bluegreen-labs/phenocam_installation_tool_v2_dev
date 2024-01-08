@@ -16,7 +16,7 @@ echo "# Running the installation script on the NetCam Live2 camera!"
 echo "#"
 
 # grab command line variables
-server=$1
+camera_ip=$1
 password=$2
 camera=$3
 time_offset=$4
@@ -24,6 +24,7 @@ TZ=$5
 cron_start=$6
 cron_end=$7
 cron_int=$8
+server=$9
 
 tar -cf install_files.tar files/*.sh
 
@@ -64,12 +65,13 @@ command=`echo "
  
  echo '' &&
  echo '#--------------------------------------------------------------------' &&
- echo '# Successfully uploaded install instructions, please reboot the camera' &&
+ echo '# Successfully uploaded install instructions' &&
+ echo '# Please reboot the camera by cycling the power' &&
  echo '#--------------------------------------------------------------------' &&
  echo ''
  "`
 
 # install command
-cat install_files.tar | ssh admin@${server} ${command}
+cat install_files.tar | ssh admin@${camera_ip} ${command}
 
 exit 0
