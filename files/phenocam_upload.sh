@@ -16,6 +16,7 @@ SITENAME=`awk 'NR==1' /mnt/cfg1/settings.txt`
 
 # how many servers do we upload to
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
+nrservers=`awk -v var=$nrservers 'BEGIN{ n=1; while (n <= var ) { print n; n++; } }' | tr '\n' ' '`
 
 # Move into temporary directory
 # which resides in RAM, not to
@@ -23,32 +24,9 @@ nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
 
 cd /var/tmp
 
-# export to current clock settings
-export TZ=`cat /etc/config/TZ`
-
-# switch time zone sign
-if [ -n `echo $TZ | grep -` ]; then
-	TZONE=`echo "$TZ" | sed 's/+/-/g'`
-else
-	TZONE=`echo "$TZ" | sed 's/-/+/g'`
-fi
-
 # sets the delay between the
 # RGB and IR image acquisitions
 DELAY=30
-
-# sets debug state, for script development only
-# operational value is 0
-DEBUG=1
-if [ "$DEBUG" = "1" ] ; then
-LOG="/var/tmp/IR_upload.log"
-rm -f $LOG > /dev/null
-else
-LOG="/dev/null"
-fi
-
-# how many servers do we upload to
-nrservers=`awk 'END {print NR}' server.txt`
 
 # -------------- UPLOAD IMAGES --------------------------------------
 
@@ -104,13 +82,15 @@ echo $exposure >> /var/tmp/${metafile}
 
 # run the upload script for the ip data
 # and for all servers
-for i in `seq 1 $nrservers` ;
+for i in $nrservers;
 do
 	SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
 	
 	# upload image
+	echo "uploading VIS image ${image}"
 	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${image} ${image}
 	
+	echo "uploading VIS meta-data ${metafile}"
 	# upload meta-file
 	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
 done
@@ -148,13 +128,15 @@ echo $exposure >> /var/tmp/${metafile}
 
 # run the upload script for the ip data
 # and for all servers
-for i in `seq 1 $nrservers` ;
+for i in $nrservers;
 do
-	SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt` 
+	SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
 
 	# upload image
+	echo "uploading NIR image ${image}"
 	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${image} ${image}
 	
+	echo "uploading NIR meta-data ${metafile}"
 	# upload meta-file
 	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
 done
@@ -162,4 +144,7 @@ done
 # clean up files
 rm *.jpg
 rm *.meta
+
+# Reset to VIS
+/usr/sbin/set_ir.sh 0
 

@@ -17,19 +17,19 @@ echo "#"
 
 # grab command line variables
 camera_ip=$1
-password=$2
-camera=$3
-time_offset=$4
-TZ=$5
-cron_start=$6
-cron_end=$7
-cron_int=$8
-server=$9
+camera=$2
+time_offset=$3
+TZ=$4
+cron_start=$5
+cron_end=$6
+cron_int=$7
+server=$8
 
 tar -cf install_files.tar files/*.sh
 
 echo "#"
-echo "# Uploading installation files, please approve this transaction!"
+echo "# Uploading installation files, please approve this transaction by"
+echo "# by providing a valid password!"
 echo "#"
 echo "#--------------------------------------------------------------------"
 echo ""
@@ -54,6 +54,7 @@ command=`echo "
  echo ${cron_start} >> /mnt/cfg1/settings.txt &&
  echo ${cron_end} >> /mnt/cfg1/settings.txt &&
  echo ${cron_int} >> /mnt/cfg1/settings.txt &&
+ echo ${server} > /mnt/cfg1/server.txt &&
  
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi &&
  
