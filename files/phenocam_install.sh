@@ -41,8 +41,7 @@ chmod a+rwx /mnt/cfg1/scripts/*.sh
 # Only update the settings if explicitly
 # instructed to do so, this file will be
 # set to TRUE by the PIT.sh script, which
-# upon reboot will then be run. Calling
-# the script on s
+# upon reboot will then be run.
 
 if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then 
 

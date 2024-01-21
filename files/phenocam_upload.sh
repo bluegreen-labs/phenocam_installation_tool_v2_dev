@@ -21,7 +21,6 @@ nrservers=`awk -v var=$nrservers 'BEGIN{ n=1; while (n <= var ) { print n; n++; 
 # Move into temporary directory
 # which resides in RAM, not to
 # wear out other permanent memory
-
 cd /var/tmp
 
 # sets the delay between the
@@ -84,15 +83,16 @@ echo $exposure >> /var/tmp/${metafile}
 # and for all servers
 for i in $nrservers;
 do
-	SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+ SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+
+ # upload image
+ echo "uploading VIS image ${image}"
+ ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${image} ${image}
 	
-	# upload image
-	echo "uploading VIS image ${image}"
-	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${image} ${image}
-	
-	echo "uploading VIS meta-data ${metafile}"
-	# upload meta-file
-	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
+ echo "uploading VIS meta-data ${metafile}"
+ # upload meta-file
+ ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
+
 done
 
 # clean up files
@@ -115,6 +115,7 @@ echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
 
 # Set the image to NIR
 /usr/sbin/set_ir.sh 1
+/usr/sbin/set_overlay.sh 1
 
 # adjust exposure 
 sleep $DELAY
@@ -130,15 +131,16 @@ echo $exposure >> /var/tmp/${metafile}
 # and for all servers
 for i in $nrservers;
 do
-	SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+ SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
 
-	# upload image
-	echo "uploading NIR image ${image}"
-	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${image} ${image}
+ # upload image
+ echo "uploading NIR image ${image}"
+ ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${image} ${image}
 	
-	echo "uploading NIR meta-data ${metafile}"
-	# upload meta-file
-	ftpput ${SERVER} -u anonymous -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
+ echo "uploading NIR meta-data ${metafile}"
+ # upload meta-file
+ ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
+
 done
 
 # clean up files
