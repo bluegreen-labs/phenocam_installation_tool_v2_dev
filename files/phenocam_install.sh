@@ -32,7 +32,8 @@ chmod a+rw /var/tmp/log.txt
 # create default server list if required
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
  echo ${host} > /mnt/cfg1/server.txt
- chmod /mnt/cfg1/server.txt
+ echo "using default host: ${host}" >> /var/tmp/log.txt
+ chmod a+rw /mnt/cfg1/server.txt
 fi
 
 # update permissions scripts
@@ -58,28 +59,29 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	fi
 
 	#----- set time zone
-	echo ${TZ} > /var/TZ
+	#echo ${TZ} > /var/TZ
 	
 	#----- set overlay
 	
 	
 
 	#----- generate random number between 0 and the interval value
+	
 	rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
 
 	# divide 60 min by the interval
-	div=`awk "BEGIN {print ${cron_int}/59}"`
-
+	div=`awk 'BEGIN {print ${cron_int}/59}'`
 	int=`echo $div | cut -d'.' -f1`
 	rem=`echo $div | cut -d'.' -f2`
 
 	# generate list of values to iterate over
-	values=`awk "BEGIN{ for(i=0;i<=${cron_int};i++) print i}"`
+	values=`awk -v max=${cron_int} 'BEGIN{ for(i=0;i<=max;i++) print i}'`
 
-	for i in ${values};do
-		product=`awk "BEGIN {print ${cron_int}*${i}}"`
-		sum=`awk "BEGIN {print ${product}+${rnumber}}"`
-		if [ "${i}" = "0" ];then 
+	for i in ${values}; do
+		product=`awk -v int=${cron_int} -v step=${i} 'BEGIN {print int(int*step)}'`
+		sum=`awk -v product=${product} -v nr=${rnumber} 'BEGIN {print int(product+nr)}'`
+		
+		if [ "${i}" -eq "0" ];then 
 			interval=`echo ${sum}`
 		else
 			if [ "$sum" -le "59" ];then
@@ -88,18 +90,19 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 		fi
 	done
 
+	echo $interval
 	echo "crontab intervals set to: ${interval}" >> /var/tmp/log.txt
 
 	#----- set root cron jobs
 	
 	# set the main picture taking routine
-	echo "${interval} ${cron_start}-${cron_end} * * * sh /mnt/cfg1/scripts/phenocam_upload.sh" > /mnt/cfg1/schedule/root
+	echo "${interval} ${cron_start}-${cron_end} * * * sh /mnt/cfg1/scripts/phenocam_upload.sh" > /mnt/cfg1/schedule/admin
 	
 	# upload ip address info
-	echo "59 11 * * * sh /mnt/cfg1/scripts/phenocam_ip_table.sh" >> /mnt/cfg1/schedule/root
+	echo "59 11 * * * sh /mnt/cfg1/scripts/phenocam_ip_table.sh" >> /mnt/cfg1/schedule/admin
 		
 	# reboot at midnight
-	echo "59 23 * * * reboot" >> /mnt/cfg1/schedule/root
+	echo "59 23 * * * reboot" >> /mnt/cfg1/schedule/admin
 
 fi
 
