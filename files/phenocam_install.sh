@@ -70,15 +70,15 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
 
 	# divide 60 min by the interval
-	div=`awk 'BEGIN {print ${cron_int}/59}'`
+	div=`awk -v interval=${cron_int} 'BEGIN {print 59/interval}'`
 	int=`echo $div | cut -d'.' -f1`
-	rem=`echo $div | cut -d'.' -f2`
+	
 
 	# generate list of values to iterate over
-	values=`awk -v max=${cron_int} 'BEGIN{ for(i=0;i<=max;i++) print i}'`
+	values=`awk -v max=${int} 'BEGIN{ for(i=0;i<=max;i++) print i}'`
 
 	for i in ${values}; do
-		product=`awk -v int=${cron_int} -v step=${i} 'BEGIN {print int(int*step)}'`
+		product=`awk -v interval=${cron_int} -v step=${i} 'BEGIN {print int(interval*step)}'`	
 		sum=`awk -v product=${product} -v nr=${rnumber} 'BEGIN {print int(product+nr)}'`
 		
 		if [ "${i}" -eq "0" ];then 
