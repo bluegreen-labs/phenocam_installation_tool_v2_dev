@@ -73,7 +73,6 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	div=`awk -v interval=${cron_int} 'BEGIN {print 59/interval}'`
 	int=`echo $div | cut -d'.' -f1`
 	
-
 	# generate list of values to iterate over
 	values=`awk -v max=${int} 'BEGIN{ for(i=0;i<=max;i++) print i}'`
 
