@@ -6,7 +6,7 @@
 # (phenocam.nau.edu) on your NetCam Live2 camera REMOTELY with
 # minimum interaction with the camera
 #
-# (c) Koen Hufkens for BlueGreen Labs
+# (c) Koen Hufkens for BlueGreen Labs (BV)
 #--------------------------------------------------------------------
 
 tar -cf install files/*.sh
@@ -72,8 +72,8 @@ echo ""
 
 command="
  if [ -f '/mnt/cfg1/server.txt' ]; then rm /mnt/cfg1/server.txt; fi &&
- echo TRUE > /mnt/cfg1/update.txt
- echo ${name} > /mnt/cfg1/settings.txt
+ echo TRUE > /mnt/cfg1/update.txt &&
+ echo ${name} > /mnt/cfg1/settings.txt &&
  echo ${offset} >> /mnt/cfg1/settings.txt &&
  echo ${tz} >> /mnt/cfg1/settings.txt &&
  echo ${start} >> /mnt/cfg1/settings.txt &&

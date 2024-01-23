@@ -10,7 +10,7 @@
 # will pull all installation files from a server and adjust the
 # settings on the NetCam accordingly.
 #
-# Koen Hufkens (August 2023) koen.hufkens@gmail.com
+# (c) Koen Hufkens for BlueGreen Labs (BV)
 #--------------------------------------------------------------------
 
 sleep 30
@@ -66,27 +66,26 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
 
 	#----- generate random number between 0 and the interval value
-	
 	rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
-
+	
 	# divide 60 min by the interval
 	div=`awk -v interval=${cron_int} 'BEGIN {print 59/interval}'`
 	int=`echo $div | cut -d'.' -f1`
 	
 	# generate list of values to iterate over
 	values=`awk -v max=${int} 'BEGIN{ for(i=0;i<=max;i++) print i}'`
-
+	
 	for i in ${values}; do
-		product=`awk -v interval=${cron_int} -v step=${i} 'BEGIN {print int(interval*step)}'`	
-		sum=`awk -v product=${product} -v nr=${rnumber} 'BEGIN {print int(product+nr)}'`
-		
-		if [ "${i}" -eq "0" ];then 
-			interval=`echo ${sum}`
-		else
-			if [ "$sum" -le "59" ];then
-			interval=`echo ${interval},${sum}`
-			fi
-		fi
+	 product=`awk -v interval=${cron_int} -v step=${i} 'BEGIN {print int(interval*step)}'`	
+	 sum=`awk -v product=${product} -v nr=${rnumber} 'BEGIN {print int(product+nr)}'`
+	 
+	 if [ "${i}" -eq "0" ];then 
+	  interval=`echo ${sum}`
+	 else
+	  if [ "$sum" -le "59" ];then
+	   interval=`echo ${interval},${sum}`
+	  fi
+	 fi
 	done
 
 	echo $interval
@@ -109,7 +108,7 @@ fi
 # i.e. skip if called more than once, unless
 # this file is manually set to TRUE which
 # would rerun the install routine upon reboot
-echo "FALSE" > /mnt/cfg1/update.txt
+#echo "FALSE" > /mnt/cfg1/update.txt
 
 echo "Finished initial setup" >> /var/tmp/log.txt
 echo "----" >> /var/tmp/log.txt

@@ -1,11 +1,10 @@
 #!/bin/sh
 
 #--------------------------------------------------------------------
-# This script is cued up in the crontab file and called every
-# x min to upload two images, a standard RGB image and an infra-
-# red (IR) image (if available) to the PhenoCam server.
+# This script uploads images to a PhenoCam server, for both
+# the VIS and NIR configuration settings
 #
-# (c) Koen Hufkens for BlueGreen Labs
+# (c) Koen Hufkens for BlueGreen Labs (BV)
 #--------------------------------------------------------------------
 
 # -------------- SETTINGS -------------------------------------------
@@ -26,8 +25,6 @@ cd /var/tmp
 # sets the delay between the
 # RGB and IR image acquisitions
 DELAY=30
-
-# -------------- UPLOAD IMAGES --------------------------------------
 
 # grab date - keep fixed for RGB and IR uploads
 DATE=`date +"%a %b %d %Y %H:%M:%S"`
@@ -115,7 +112,6 @@ echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
 
 # Set the image to NIR
 /usr/sbin/set_ir.sh 1
-/usr/sbin/set_overlay.sh 1
 
 # adjust exposure 
 sleep $DELAY
