@@ -59,4 +59,22 @@ with:
 | -m            | interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
 | -d (optional) | image destination server (ip address / domain), defaults to phenocam.nau.edu|
 
+## License
 
+```
+Copyright (c) 2023-present BlueGreen Labs
+
+Permission is hereby granted, free of charge, to limited persons obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software subject to the following conditions:
+
+THE SOFTWARE COVERS USE WITHIN THE PHENOCAM (US) NETWORK, WITH SITES AFFILIATED
+WITH THE NETWORK PROVIDED WITH A LICENSE TO USE THIS CONFIGURATION TOOL.
+ALL OTHER USE CASES ARE CONTINGENT ON EXPRESSED PERMISSION BY THE COPYRIGHT
+HOLDERS AND A FORMAL LICENSE AGREEMENT.
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.
+```
