@@ -1,15 +1,20 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------
+# (c) Koen Hufkens for BlueGreen Labs (BV)
+#
 # This script installs all necessary configuration
 # files as required to upload images to the PhenoCam server
 # (phenocam.nau.edu) on your NetCam Live2 camera REMOTELY with
 # minimum interaction with the camera
 #
-# (c) Koen Hufkens for BlueGreen Labs (BV)
+# Unauthorized changes to this script or unlicensed use outside
+# the PhenoCam network are considered a copyright/licensing violation
+# and will be prosecuted.
+#
 #--------------------------------------------------------------------
 
-tar -cf install files/*.sh
+tar -cf install files/*
 base64 install > install.bin
 
 # subroutines
@@ -55,9 +60,21 @@ done
 
 # check if the server string is there
 # with PhenoCam US as default
-if [[ ! -n '${server}' ]]; then
+if [[ -z ${server} ]]; then
  echo "No server provided, using the default NAU server."
  server="phenocam.nau.edu"
+fi
+
+# licensing warning
+if [[ ${server} != "phenocam.nau.edu" ]]; then
+ echo ""
+ echo "===================================================================="
+ echo ""
+ echo " Your LICENSE might not be in COMPLIANCE, please contact: "
+ echo " info@bluegreenlabs.org for licensing PERMISSION"
+ echo ""
+ echo " (c) BlueGreen Labs 2024"
+ echo "===================================================================="
 fi
 
 echo ""
@@ -79,10 +96,13 @@ command="
  echo ${start} >> /mnt/cfg1/settings.txt &&
  echo ${end} >> /mnt/cfg1/settings.txt &&
  echo ${int} >> /mnt/cfg1/settings.txt &&
+ echo '225' > /mnt/cfg1/settings.txt &&
+ echo '130' >> /mnt/cfg1/settings.txt &&
+ echo '230' >> /mnt/cfg1/settings.txt &&
  echo ${server} > /mnt/cfg1/server.txt &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
- cp /var/tmp/files/*.sh /mnt/cfg1/scripts &&
+ cp /var/tmp/files/* /mnt/cfg1/scripts &&
  rm -rf /var/tmp/files &&
  echo '#!/bin/sh' > /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&

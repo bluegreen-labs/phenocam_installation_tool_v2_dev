@@ -1,10 +1,11 @@
 #!/bin/sh
 
 #--------------------------------------------------------------------
-# This script uploads images to a PhenoCam server, for both
-# the VIS and NIR configuration settings
-#
 # (c) Koen Hufkens for BlueGreen Labs (BV)
+#
+# Unauthorized changes to this script are considered a copyright
+# violation and will be prosecuted.
+#
 #--------------------------------------------------------------------
 
 # -------------- SETTINGS -------------------------------------------
@@ -15,7 +16,7 @@ SITENAME=`awk 'NR==1' /mnt/cfg1/settings.txt`
 
 # how many servers do we upload to
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
-nrservers=`awk -v var=$nrservers 'BEGIN{ n=1; while (n <= var ) { print n; n++; } }' | tr '\n' ' '`
+nrservers=`awk -v var=${nrservers} 'BEGIN{ n=1; while (n <= var ) { print n; n++; } }' | tr '\n' ' '`
 
 # Move into temporary directory
 # which resides in RAM, not to
@@ -55,14 +56,6 @@ connection=`ping -q -c 1 8.8.8.8 > /dev/null && echo ok || echo error`
 metafile=`echo ${SITENAME}_${DATETIMESTRING}.meta`
 image=`echo ${SITENAME}_${DATETIMESTRING}.jpg`
 
-# create base meta-data file from configuration settings
-cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
-
-# append meta-data
-echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
-echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
-echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
-
 # Set the image to non IR i.e. VIS
 /usr/sbin/set_ir.sh 0
 
@@ -74,13 +67,22 @@ wget http://127.0.0.1/image.jpg -O ${image}
 
 # grab the exposure time and append to meta-data
 exposure=`/usr/sbin/get_exp`
+
+# create base meta-data file from configuration settings
+cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
 echo $exposure >> /var/tmp/${metafile}
+echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
+echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
+echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
+/mnt/cfg1/scripts/chls >> /var/tmp/${metafile}
 
 # run the upload script for the ip data
 # and for all servers
 for i in $nrservers;
 do
  SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+ 
+ echo "uploading to: ${SERVER}"
 
  # upload image
  echo "uploading VIS image ${image}"
@@ -102,14 +104,6 @@ rm *.meta
 metafile=`echo ${SITENAME}_IR_${DATETIMESTRING}.meta`
 image=`echo ${SITENAME}_IR_${DATETIMESTRING}.jpg`
 
-# create base meta-data file from configuration settings
-cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
-
-# append meta-data
-echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
-echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
-echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
-
 # Set the image to NIR
 /usr/sbin/set_ir.sh 1
 
@@ -121,13 +115,20 @@ wget http://127.0.0.1/image.jpg -O ${image}
 
 # grab the exposure time and append to meta-data
 exposure=`/usr/sbin/get_exp`
+
+# create base meta-data file from configuration settings
+cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
 echo $exposure >> /var/tmp/${metafile}
+echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
+echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
+echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
+/mnt/cfg1/scripts/chls >> /var/tmp/${metafile}
 
 # run the upload script for the ip data
 # and for all servers
 for i in $nrservers;
 do
- SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+ SERVER=`awk -v p=${i} 'NR==p' /mnt/cfg1/server.txt`
 
  # upload image
  echo "uploading NIR image ${image}"

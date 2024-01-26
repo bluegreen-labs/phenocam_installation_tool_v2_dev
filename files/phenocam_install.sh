@@ -1,16 +1,11 @@
 #!/bin/sh
 
 #--------------------------------------------------------------------
-# This script installs all necessary configuration
-# files as required to upload images to the PhenoCam server
-# (phenocam.nau.edu) on your NetCam Live2 camera
-#
-# NOTES: this program can be used stand alone or called remotely
-# as is done in the PIT.sh script. The script
-# will pull all installation files from a server and adjust the
-# settings on the NetCam accordingly.
-#
 # (c) Koen Hufkens for BlueGreen Labs (BV)
+#
+# Unauthorized changes to this script are considered a copyright
+# violation and will be prosecuted.
+#
 #--------------------------------------------------------------------
 
 sleep 30
@@ -27,7 +22,6 @@ host='phenocam.nau.edu'
 
 # start logging
 echo "----- ${today} -----" > /var/tmp/log.txt
-chmod a+rw /var/tmp/log.txt
 
 # create default server list if required
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
@@ -53,17 +47,21 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 TZ=`awk 'NR==3' /mnt/cfg1/settings.txt`
 	 cron_start=`awk 'NR==4' /mnt/cfg1/settings.txt`
 	 cron_end=`awk 'NR==5' /mnt/cfg1/settings.txt`
-	 cron_int=`awk 'NR==6' /mnt/cfg1/settings.txt` 
+	 cron_int=`awk 'NR==6' /mnt/cfg1/settings.txt`
+ 	 red=`awk 'NR==7' /mnt/cfg1/settings.txt`
+	 green=`awk 'NR==8' /mnt/cfg1/settings.txt`
+	 blue=`awk 'NR==9' /mnt/cfg1/settings.txt` 
 	else
 	 echo "Settings file missing, aborting install routine!" >> /var/tmp/log.txt
 	fi
 
 	#----- set time zone
-	#echo ${TZ} > /var/TZ
+	echo ${TZ} > /var/TZ # REQUIRES ROOT PERMISSIONS
 	
 	#----- set overlay
 	
-	
+	#----- set colour settings
+	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
 
 	#----- generate random number between 0 and the interval value
 	rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
@@ -108,7 +106,7 @@ fi
 # i.e. skip if called more than once, unless
 # this file is manually set to TRUE which
 # would rerun the install routine upon reboot
-#echo "FALSE" > /mnt/cfg1/update.txt
+echo "FALSE" > /mnt/cfg1/update.txt
 
 echo "Finished initial setup" >> /var/tmp/log.txt
 echo "----" >> /var/tmp/log.txt
