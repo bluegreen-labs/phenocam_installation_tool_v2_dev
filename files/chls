@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#--------------------------------------------------------------------
+# (c) Koen Hufkens for BlueGreen Labs (BV)
+#
+# Unauthorized changes to this script are considered a copyright
+# violation and will be prosecuted.
+#
+#--------------------------------------------------------------------
+
+nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
+allow="nau"
+match=`grep -E ${allow} /mnt/cfg1/server.txt | wc -l`
+
+if [ ${nrservers} -eq ${match} ];
+then
+ echo licensed
+fi
