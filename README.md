@@ -49,6 +49,7 @@ with:
 | Parameter     | Description |
 | ------------- | ------------------------------ |
 | -i            | ip address of the camera |
+| -p            | camera password |
 | -n            | the name of the camera / site |
 | -o            | difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC) |
 | -t            | a text string corresponding to the local time zone (e.g. EST) |
