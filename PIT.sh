@@ -19,9 +19,10 @@ base64 install > install.bin
 
 # subroutines
 error_handler(){
-  echo " Installation failed, check the IP address!"
   echo ""
-  echo " (c) BlueGreen Labs 2024"
+  echo " NOTE: If no confirmation of a successful upload is provided,"
+  echo " check all script parameters!"
+  echo ""
   echo "===================================================================="
   exit 1
 }
@@ -31,6 +32,7 @@ usage() {
  echo "
  Usage: $0
   [-i <camera ip address>]
+  [-p <camera password>]
   [-n <camera name>]
   [-o <time offset>] 
   [-t <time zone>] 
@@ -42,11 +44,12 @@ usage() {
  }
 
 # grab arguments
-while getopts ":hi:n:o:t:s:e:m:d:" option;
+while getopts ":hi:p:n:o:t:s:e:m:d:" option;
 do
     case "${option}"
         in
         i) ip=${OPTARG} ;;
+        p) pass=${OPTARG} ;;
         n) name=${OPTARG} ;;
         o) offset=${OPTARG} ;;
         t) tz=${OPTARG} ;;
@@ -73,7 +76,7 @@ if [[ ${server} != "phenocam.nau.edu" ]]; then
  echo " Your LICENSE might not be in COMPLIANCE, please contact: "
  echo " info@bluegreenlabs.org for licensing PERMISSION"
  echo ""
- echo " (c) BlueGreen Labs 2024"
+ echo " (c) BlueGreen Labs 2023"
  echo "===================================================================="
 fi
 
@@ -81,10 +84,12 @@ echo ""
 echo "===================================================================="
 echo ""
 echo " Running the installation script on the NetCam Live2 camera!"
+echo ""
+echo " (c) BlueGreen Labs 2024"
 echo " -----------------------------------------------------------"
 echo ""
 echo " Uploading installation files, please approve this transaction by"
-echo " by providing a valid password!"
+echo " by confirming the password!"
 echo ""
 
 command="
@@ -96,10 +101,11 @@ command="
  echo ${start} >> /mnt/cfg1/settings.txt &&
  echo ${end} >> /mnt/cfg1/settings.txt &&
  echo ${int} >> /mnt/cfg1/settings.txt &&
- echo '225' > /mnt/cfg1/settings.txt &&
+ echo '225' >> /mnt/cfg1/settings.txt &&
  echo '130' >> /mnt/cfg1/settings.txt &&
  echo '230' >> /mnt/cfg1/settings.txt &&
  echo ${server} > /mnt/cfg1/server.txt &&
+ echo ${pass} > /mnt/cfg1/password.txt &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
@@ -109,15 +115,19 @@ command="
  echo '' &&
  echo ' Successfully uploaded install instructions!' &&
  echo '' &&
- echo ' --> Please reboot the camera by cycling the power! <-- ' &&
+ echo ' --> Reboot the camera by cycling the power or wait 10 seconds! <-- ' &&
  echo '' &&
- echo ' (c) BlueGreen Labs 2024' &&
  echo '====================================================================' &&
- echo ''
+ echo '' &&
+ sh /mnt/cfg1/scripts/reboot_camera.sh ${pass}
 "
 
 # install command
-cat install.bin | ssh admin@${ip} ${command} || error_handler
+cat install.bin | ssh admin@${ip} ${command} || error_handler 2>/dev/null
+
+# remove last line from history
+# containing the password
+history -d -1
 
 # exit
 exit 0

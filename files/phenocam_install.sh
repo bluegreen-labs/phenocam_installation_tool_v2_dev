@@ -9,6 +9,7 @@
 #--------------------------------------------------------------------
 
 sleep 30
+cd /var/tmp
 
 # get todays date
 today=`date +"%Y %m %d %H:%M:%S"`
@@ -31,7 +32,7 @@ if [ ! -f '/mnt/cfg1/server.txt' ]; then
 fi
 
 # update permissions scripts
-chmod a+rwx /mnt/cfg1/scripts/*.sh
+chmod a+rwx /mnt/cfg1/scripts/*
 
 # Only update the settings if explicitly
 # instructed to do so, this file will be
@@ -59,6 +60,16 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	echo ${TZ} > /var/TZ # REQUIRES ROOT PERMISSIONS
 	
 	#----- set overlay
+	
+	find . -name vb.htm* -delete
+	wget http://admin:admin@127.0.0.1/vb.htm?overlaytext1=TEST
+	find . -name vb.htm* -delete
+	
+	# cycle overlay
+	wget http://admin:admin@127.0.0.1/vb.htm?textenable1=0
+	find . -name vb.htm* -delete
+	wget http://admin:admin@127.0.0.1/vb.htm?textenable1=1
+	find . -name vb.htm* -delete
 	
 	#----- set colour settings
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
@@ -110,5 +121,6 @@ echo "FALSE" > /mnt/cfg1/update.txt
 
 echo "Finished initial setup" >> /var/tmp/log.txt
 echo "----" >> /var/tmp/log.txt
+
 exit 0
 

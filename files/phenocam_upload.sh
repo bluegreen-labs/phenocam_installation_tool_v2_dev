@@ -86,11 +86,11 @@ do
 
  # upload image
  echo "uploading VIS image ${image}"
- ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${image} ${image}
+ ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image}
 	
  echo "uploading VIS meta-data ${metafile}"
  # upload meta-file
- ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
+ ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile}
 
 done
 
