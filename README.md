@@ -6,7 +6,7 @@ Version 2 addresses the installation routine for the Stardot Netcam Live 2 camer
 
 ## Installation
 
-This software is provided under a perpetual license to the PhenoCam US network and its users. All other users require **permission** from the copyright holder, BlueGreen labs (BV) for the use of this software. Use without permission or reverse engineering is considered a violation of copyright and will be prosecuted.
+This software is provided under a perpetual license to the PhenoCam US network and its users in it's basic form. All other users require a **license** and/or service contract from the copyright holder, BlueGreen labs (BV) for the use of this software. Use without permission or its reverse engineering is considered a violation of copyright and will be prosecuted (i.e. US DMCA or EU Directive on Copyright in the Digital Single Market (2019/790)).
 
 ### WARNING / DISCLAIMER
 
