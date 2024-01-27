@@ -34,7 +34,7 @@ usage() {
   [-i <camera ip address>]
   [-p <camera password>]
   [-n <camera name>]
-  [-o <time offset>] 
+  [-o <time offset from UTC>] 
   [-t <time zone>] 
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
@@ -105,7 +105,7 @@ command="
  echo '130' >> /mnt/cfg1/settings.txt &&
  echo '230' >> /mnt/cfg1/settings.txt &&
  echo ${server} > /mnt/cfg1/server.txt &&
- echo ${pass} > /mnt/cfg1/password.txt &&
+ echo ${pass} > /mnt/cfg1/.password &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&

@@ -34,6 +34,8 @@ fi
 # update permissions scripts
 chmod a+rwx /mnt/cfg1/scripts/*
 
+ls -alh /mnt/cfg > /var/tmp/cfg.txt
+
 # Only update the settings if explicitly
 # instructed to do so, this file will be
 # set to TRUE by the PIT.sh script, which
@@ -45,7 +47,6 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	if [ -f '/mnt/cfg1/settings.txt' ]; then
 	 camera=`awk 'NR==1' /mnt/cfg1/settings.txt`
 	 time_offset=`awk 'NR==2' /mnt/cfg1/settings.txt`
-	 TZ=`awk 'NR==3' /mnt/cfg1/settings.txt`
 	 cron_start=`awk 'NR==4' /mnt/cfg1/settings.txt`
 	 cron_end=`awk 'NR==5' /mnt/cfg1/settings.txt`
 	 cron_int=`awk 'NR==6' /mnt/cfg1/settings.txt`
@@ -55,20 +56,31 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	else
 	 echo "Settings file missing, aborting install routine!" >> /var/tmp/log.txt
 	fi
+	
+        pass=`awk 'NR==1' /mnt/cfg1/.password`
 
-	#----- set time zone
-	echo ${TZ} > /var/TZ # REQUIRES ROOT PERMISSIONS
+	#----- set time zone offset (from UTC)
+	
+	# set time zone
+	# dump setting to config file
+	SIGN=`echo $TIMEOFFSET | cut -c'1'`
+
+	if [ "$SIGN" = "+" ]; then
+	 echo "GMT$TIMEOFFSET" | sed 's/+/-/g' > /var/TZ
+	else
+	 echo "GMT$TIMEOFFSET" | sed 's/-/+/g' > /var/TZ
+	fi
 	
 	#----- set overlay
 	
 	find . -name vb.htm* -delete
-	wget http://admin:admin@127.0.0.1/vb.htm?overlaytext1=TEST
+	wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=TEST
 	find . -name vb.htm* -delete
 	
 	# cycle overlay
-	wget http://admin:admin@127.0.0.1/vb.htm?textenable1=0
+	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
 	find . -name vb.htm* -delete
-	wget http://admin:admin@127.0.0.1/vb.htm?textenable1=1
+	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=1
 	find . -name vb.htm* -delete
 	
 	#----- set colour settings
