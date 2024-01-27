@@ -1,18 +1,16 @@
 # PhenoCam Installation Tool (PIT) v2
 
-PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu).
-
-Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam or affiliated networks.
+PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam or affiliated networks.
 
 ## Installation
 
-This software is provided under a perpetual license to the PhenoCam US network and its users. All other users require **permission** from the copyright holder, BlueGreen labs (BV) for the use of this software. Use without permission or reverse engineering is considered a violation of copyright and will be prosecuted.
+This software is provided under a perpetual license to the PhenoCam US network and its users in it's basic form. All other users require a **license** and/or service contract from the copyright holder, BlueGreen labs (BV) for the use of this software. Unlicensed use of the software or its reverse engineering is considered a violation of copyright and will be prosecuted under the US DMCA or EU Directive on Copyright in the Digital Single Market (2019/790) or other applicable law.
 
 ### WARNING / DISCLAIMER
 
-The default password on the Stardot cameras is INSECURE. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with estimated times to infection < 30 min). ALWAYS configure the camera password to a non-default secure password over a secure network. BlueGreen Labs (BV) can not be held liable for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks.
+The default password on the Stardot cameras is INSECURE. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with estimated times to infection < 30 min). ALWAYS configure the camera password to a non-default secure password over a secure network. BlueGreen Labs (BV) is not liable for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks due to lack of due diligence on part of the user.
 
-### hardware prerequisites
+### Hardware prerequisites
 
 Please connect a computer and the PhenoCam to the same (wireless) router which has internet access. Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
 
@@ -29,7 +27,7 @@ arp -a
 
 to get a list of the MAC addresses and IP’s of all the computers on the local network. The StarDot cameras have a MAC address that starts with 00:30 so you may be able to find the camera that way. Again, you may need help from the local network administrator for this step.
 
-### software prerequisites
+### Software prerequisites
 
 For the script to run successfully you will need an `ssh` client and bash support, these are included in both MacOS and Linux default installs and can be provided in Windows by [using the linux subsystem](https://learn.microsoft.com/en-us/windows/wsl/install). 
 
@@ -59,4 +57,22 @@ with:
 | -m            | interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
 | -d (optional) | image destination server (ip address / domain), defaults to phenocam.nau.edu|
 
+## License
+
+```
+Copyright (c) 2023-present BlueGreen Labs
+
+Permission is hereby granted, free of charge, to limited persons obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software subject to the following conditions:
+
+THE SOFTWARE COVERS USE WITHIN THE PHENOCAM (US) NETWORK, WITH SELECT SITES 
+AFFILIATED WITH THE NETWORK PROVIDED WITH A LICENSE TO USE THIS CONFIGURATION TOOL.
+ALL OTHER USE CASES ARE REQUIRE ON A LICENSE AGREEMENT FROM THE COPYRIGHT HOLDERS.
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.
+```
 
