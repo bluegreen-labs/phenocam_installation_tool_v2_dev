@@ -4,7 +4,7 @@ PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam
 
 ## Installation
 
-This software is provided under a perpetual license to the PhenoCam US network and its users in it's basic form. All other users require a **license** and/or service contract from the copyright holder, BlueGreen labs (BV) for the use of this software. Unlicensed use of the software or its reverse engineering is considered a violation of copyright and will be prosecuted under the US DMCA or EU Directive on Copyright in the Digital Single Market (2019/790) or other applicable law. By downloading and using this software you agree upon these terms.
+This software is provided under a perpetual license to the PhenoCam US network and its users in its basic form. All other users require a **license** and/or service contract from the copyright holder, BlueGreen labs (BV) for the use of this software. Unlicensed use of the software or its reverse engineering is considered a violation of copyright and will be prosecuted under the US DMCA or EU Directive on Copyright in the Digital Single Market (2019/790) or other applicable law. By downloading and using this software you agree upon these terms.
 
 ### WARNING / DISCLAIMER
 
@@ -62,17 +62,5 @@ with:
 
 ```
 Copyright (c) 2023-present BlueGreen Labs
-
-Permission is hereby granted, free of charge, to limited persons obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software subject to the following conditions:
-
-THE SOFTWARE COVERS USE WITHIN THE PHENOCAM (US) NETWORK, WITH SELECT SITES 
-AFFILIATED WITH THE NETWORK PROVIDED WITH A LICENSE TO USE THIS CONFIGURATION TOOL.
-ALL OTHER USE CASES ARE REQUIRE ON A LICENSE AGREEMENT FROM THE COPYRIGHT HOLDERS.
-
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
-DEALINGS IN THE SOFTWARE.
+All rights reserved
 ```
