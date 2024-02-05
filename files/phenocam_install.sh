@@ -34,8 +34,6 @@ fi
 # update permissions scripts
 chmod a+rwx /mnt/cfg1/scripts/*
 
-ls -alh /mnt/cfg > /var/tmp/cfg.txt
-
 # Only update the settings if explicitly
 # instructed to do so, this file will be
 # set to TRUE by the PIT.sh script, which
