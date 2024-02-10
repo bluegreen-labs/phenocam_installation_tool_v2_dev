@@ -4,9 +4,7 @@ PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam
 
 ## Installation
 
-This software is provided under a perpetual license to the PhenoCam US network and its users in its basic form. All other users, and use cases, require permission from BlueGreen labs (BV). By downloading and using this software you agree upon these terms.
-
-### WARNING / DISCLAIMER
+This software is provided under a perpetual license to the PhenoCam US network and its users in its basic form. All other users, and use cases, require permission from BlueGreen labs (BV).
 
 > [!warning]
 > The default password on the Stardot cameras is INSECURE. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with estimated times to infection < 30 min). 
@@ -18,6 +16,8 @@ This software is provided under a perpetual license to the PhenoCam US network a
 > 4) connect the camera and verify uploads to the PhenoCam server.
 > 
 > ALWAYS configure the camera password to a non-default secure password over a secure network. BlueGreen Labs (BV) is not liable for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks due to lack of due diligence on part of the user.
+
+By downloading and using this software you agree upon these terms.
 
 ### Hardware prerequisites
 
@@ -43,7 +43,7 @@ For the script to run successfully you will need an `ssh` client and bash suppor
 You can download this required repository by either a direct download of a [zip file](https://github.com/bluegreen-labs/phenocam_installation_tool_v2/), or if you have git running by cloning the branch with:
 
 ```bash
-git clone -b netcamlive https://github.com/bluegreen-labs/phenocam_installation_tool_v2.git
+git clone https://github.com/bluegreen-labs/phenocam_installation_tool_v2.git
 ```
 
 In the (unzipped) project directory you can then execute the below commands. The installation tool uses the following syntax

@@ -100,11 +100,14 @@ command="
 "
 
 # install command
-cat install.bin | ssh admin@${ip} ${command} || error_handler 2>/dev/null
+BINLINE=$(awk '/^__BINARY__/ { print NR + 1; exit 0; }' $0)
+tail -n +${BINLINE} $0 | ssh admin@${ip} ${command} || error_handler 2>/dev/null
 
-# remove last line from history
+# remove last lines from history
 # containing the password
-history -d -1
+history -d -1--2
 
 # exit
 exit 0
+
+__BINARY__
