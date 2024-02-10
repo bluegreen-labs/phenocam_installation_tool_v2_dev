@@ -6,11 +6,11 @@
 # This script installs all necessary configuration
 # files as required to upload images to the PhenoCam server
 # (phenocam.nau.edu) on your NetCam Live2 camera REMOTELY with
-# minimum interaction with the camera
+# minimum interaction with the camera.
 #
-# Unauthorized changes to this script or unlicensed use outside
-# the PhenoCam network are considered a copyright/licensing violation
-# and will be prosecuted.
+# Use is permitted within the context of the PhenoCam US network,
+# in its standard configuration. For all exceptions contact
+# BlueGreen Labs
 #
 #--------------------------------------------------------------------
 
@@ -39,7 +39,6 @@ usage() {
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
   [-m <interval minutes>]
-  [-d <image destination server, default: phenocam.nau.edu>]
   " 1>&2; exit 0;
  }
 
@@ -55,30 +54,10 @@ do
         t) tz=${OPTARG} ;;
         s) start=${OPTARG} ;;
         e) end=${OPTARG} ;;
-        m) int=${OPTARG} ;;
-        d) server=${OPTARG} ;;                
+        m) int=${OPTARG} ;;                
         h | *) usage; exit 0 ;;
     esac
 done
-
-# check if the server string is there
-# with PhenoCam US as default
-if [[ -z ${server} ]]; then
- echo "No server provided, using the default NAU server."
- server="phenocam.nau.edu"
-fi
-
-# licensing warning
-if [[ ${server} != "phenocam.nau.edu" ]]; then
- echo ""
- echo "===================================================================="
- echo ""
- echo " Your LICENSE might not be in COMPLIANCE, please contact: "
- echo " info@bluegreenlabs.org for licensing PERMISSION"
- echo ""
- echo " (c) BlueGreen Labs 2023"
- echo "===================================================================="
-fi
 
 echo ""
 echo "===================================================================="
@@ -93,7 +72,6 @@ echo " by confirming the password!"
 echo ""
 
 command="
- if [ -f '/mnt/cfg1/server.txt' ]; then rm /mnt/cfg1/server.txt; fi &&
  echo TRUE > /mnt/cfg1/update.txt &&
  echo ${name} > /mnt/cfg1/settings.txt &&
  echo ${offset} >> /mnt/cfg1/settings.txt &&
@@ -104,7 +82,6 @@ command="
  echo '225' >> /mnt/cfg1/settings.txt &&
  echo '130' >> /mnt/cfg1/settings.txt &&
  echo '230' >> /mnt/cfg1/settings.txt &&
- echo ${server} > /mnt/cfg1/server.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 

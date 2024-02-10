@@ -4,12 +4,18 @@
 # (c) Koen Hufkens for BlueGreen Labs (BV)
 #
 # Unauthorized changes to this script are considered a copyright
-# violation and will be prosecuted.
+# violation and will be prosecuted. If you came this far think
+# twice about what you are about to do. As this means that you
+# reverse engineered protection through obfuscation
+# which would constitute a first copyright offense.
 #
 #--------------------------------------------------------------------
 
 sleep 30
 cd /var/tmp
+
+# update permissions scripts
+chmod a+rwx /mnt/cfg1/scripts/*
 
 # get todays date
 today=`date +"%Y %m %d %H:%M:%S"`
@@ -24,15 +30,12 @@ host='phenocam.nau.edu'
 # start logging
 echo "----- ${today} -----" > /var/tmp/log.txt
 
-# create default server list if required
+# create default server
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
- echo ${host} > /mnt/cfg1/server.txt
- echo "using default host: ${host}" >> /var/tmp/log.txt
- chmod a+rw /mnt/cfg1/server.txt
+  echo ${host} > /mnt/cfg1/server.txt
+  echo "using default host: ${host}" >> /var/tmp/log.txt
+  chmod a+rw /mnt/cfg1/server.txt
 fi
-
-# update permissions scripts
-chmod a+rwx /mnt/cfg1/scripts/*
 
 # Only update the settings if explicitly
 # instructed to do so, this file will be
