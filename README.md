@@ -21,7 +21,7 @@ By downloading and using this software you agree upon these terms.
 
 ### Hardware prerequisites
 
-Please connect a computer and the PhenoCam to the same (wireless) router which has internet access. Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
+Please connect a computer and the PhenoCam to the same (wireless) router which has NO internet access (see warnings regarding the default password above - make sure to set a strong password before the camera is exposed to an unprotected network). Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
 
 The easiest way to find the camera’s IP address is to install [StarDot Tools](http://www.stardot.com/downloads). Run the StarDot Tools program and click “refresh”. The camera should be detected and the camera’s IP address shown (you may have to run Tools as administrator in Windows, depending on your settings).
 
@@ -63,6 +63,12 @@ with:
 | -s            | first hour of the scheduled image acquisitions (e.g. 4 in the morning) |
 | -e            | last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation) |
 | -m            | interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
+
+Once successfully configured make sure the router or camera has internet access. Wait until the camera uploads its first images to the phenocam server by verifying the webpage associated with your camera at:
+
+```
+https://phenocam.nau.edu/webcam/sites/YOURCAMERANAME/
+```
 
 ## License
 

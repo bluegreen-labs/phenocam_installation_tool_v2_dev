@@ -64,12 +64,12 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
 	# set time zone
 	# dump setting to config file
-	SIGN=`echo $TIMEOFFSET | cut -c'1'`
+	SIGN=`echo ${time_offset} | cut -c'1'`
 
 	if [ "$SIGN" = "+" ]; then
-	 echo "GMT$TIMEOFFSET" | sed 's/+/-/g' > /var/TZ
+	 echo "GMT${time_offset}" | sed 's/+/-/g' > /var/TZ
 	else
-	 echo "GMT$TIMEOFFSET" | sed 's/-/+/g' > /var/TZ
+	 echo "GMT${time_offset}" | sed 's/-/+/g' > /var/TZ
 	fi
 	
 	#----- set overlay
