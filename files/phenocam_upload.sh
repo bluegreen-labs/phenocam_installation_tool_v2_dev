@@ -50,6 +50,9 @@ ip_addr=`ifconfig eth0 | awk '/inet addr/{print substr($2,6)}'`
 # first test the connection to the google name server
 connection=`ping -q -c 1 8.8.8.8 > /dev/null && echo ok || echo error`
 
+# grab the colour balance settings!!!
+
+
 # -------------- UPLOAD VIS -----------------------------------------
 
 # create filenames
@@ -70,7 +73,8 @@ exposure=`/usr/sbin/get_exp`
 
 # create base meta-data file from configuration settings
 cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
-echo $exposure >> /var/tmp/${metafile}
+echo "exposure=$exposure" >> /var/tmp/${metafile}
+echo "ir_enable=0" >> /var/tmp/${metafile}
 echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
 echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
 echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
@@ -118,7 +122,8 @@ exposure=`/usr/sbin/get_exp`
 
 # create base meta-data file from configuration settings
 cat /mnt/cfg1/settings.txt > /var/tmp/${metafile}
-echo $exposure >> /var/tmp/${metafile}
+echo "exposure=$exposure" >> /var/tmp/${metafile}
+echo "ir_enable=1" >> /var/tmp/${metafile}
 echo "ip_addr=$ip_addr" >> /var/tmp/${metafile}
 echo "mac_addr=$mac_addr" >> /var/tmp/${metafile}
 echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
