@@ -14,9 +14,6 @@
 #
 #--------------------------------------------------------------------
 
-tar -cf install files/*
-base64 install > install.bin
-
 # subroutines
 error_handler(){
   echo ""
