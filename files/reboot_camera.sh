@@ -11,7 +11,7 @@
 pass=$1
 
 # sleep 15 seconds and trigger reboot
-sleep 15
+sleep 12
 
 # move into temporary directory
 cd /var/tmp

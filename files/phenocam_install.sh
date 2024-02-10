@@ -74,15 +74,15 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
 	#----- set overlay
 	
-	find . -name vb.htm* -delete
-	wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=TEST
-	find . -name vb.htm* -delete
+	#find . -name vb.htm* -delete
+	#wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=TEST
+	#find . -name vb.htm* -delete
 	
 	# cycle overlay
-	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
-	find . -name vb.htm* -delete
-	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=1
-	find . -name vb.htm* -delete
+	#wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
+	#find . -name vb.htm* -delete
+	#wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=1
+	#find . -name vb.htm* -delete
 	
 	#----- set colour settings
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
@@ -101,7 +101,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 product=`awk -v interval=${cron_int} -v step=${i} 'BEGIN {print int(interval*step)}'`	
 	 sum=`awk -v product=${product} -v nr=${rnumber} 'BEGIN {print int(product+nr)}'`
 	 
-	 if [ "${i}" -eq "0" ];then 
+	 if [ "${i}" -eq "0" ];then
 	  interval=`echo ${sum}`
 	 else
 	  if [ "$sum" -le "59" ];then
@@ -110,7 +110,6 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 fi
 	done
 
-	echo $interval
 	echo "crontab intervals set to: ${interval}" >> /var/tmp/log.txt
 
 	#----- set root cron jobs
