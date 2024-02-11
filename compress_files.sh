@@ -1,10 +1,9 @@
 #!/bin/bash
 
-tar -cf install files/*.sh
-base64 install > install.bin
+tar -cf install files/*
 
 cat PITe.sh > PIT.sh
-cat install.bin >> PIT.sh
+base64 install >> PIT.sh
 
 rm install*
 

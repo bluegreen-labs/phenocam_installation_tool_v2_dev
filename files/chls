@@ -9,10 +9,10 @@
 #--------------------------------------------------------------------
 
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
-allow="nau"
-match=`grep -E ${allow} /mnt/cfg1/server.txt | wc -l`
+all="nau"
+match=`grep -E ${all} /mnt/cfg1/server.txt | wc -l`
 
 if [ ${nrservers} -eq ${match} ];
 then
- echo licensed
+ echo "network=phenocam"
 fi

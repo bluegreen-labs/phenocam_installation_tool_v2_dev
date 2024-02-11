@@ -74,15 +74,9 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
 	#----- set overlay
 	
-	#find . -name vb.htm* -delete
-	#wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=TEST
-	#find . -name vb.htm* -delete
-	
-	# cycle overlay
-	#wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
-	#find . -name vb.htm* -delete
-	#wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=1
-	#find . -name vb.htm* -delete
+	# for now disable the overlay
+	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
+	find . -name vb.htm* -delete
 	
 	#----- set colour settings
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}

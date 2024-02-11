@@ -1,10 +1,11 @@
 # PhenoCam Installation Tool (PIT) v2
 
-PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam or affiliated networks.
+> [!note]
+> This is a pre-release version and should not be actively used in the deployment of PhenoCams
 
-## Installation
+PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam network.
 
-This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. A perpetual license is granted to the PhenoCam US network and its users, in its basic form. All other users, and use cases, require permission from BlueGreen labs (BV).
+This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. A perpetual license is granted to the PhenoCam US network and its users, in its basic form. All other users, and custom use cases, require permission and custom scripts from BlueGreen labs (BV).
 
 > [!warning]
 > The default password on the Stardot cameras is INSECURE. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with estimated times to infection < 30 min). 
@@ -19,9 +20,11 @@ This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US
 
 By downloading and using this software you agree upon these terms.
 
+## Installation
+
 ### Hardware prerequisites
 
-Please connect a computer and the PhenoCam to the same (wireless) router which has NO internet access (see warnings regarding the default password above - make sure to set a strong password before the camera is exposed to an unprotected network). Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
+Please connect a computer and the PhenoCam to the same (wireless) router which has **NO** internet access (see warnings regarding the default password above - make sure to set a strong password before the camera is exposed to an unprotected network). Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
 
 The easiest way to find the camera’s IP address is to install [StarDot Tools](http://www.stardot.com/downloads). Run the StarDot Tools program and click “refresh”. The camera should be detected and the camera’s IP address shown (you may have to run Tools as administrator in Windows, depending on your settings).
 
@@ -75,6 +78,6 @@ This can take some time as the PhenoCam servers take some time to update.
 ## License
 
 ```
-Copyright (c) 2023-present BlueGreen Labs
+Copyright (c) 2023 - present BlueGreen Labs
 All rights reserved
 ```
