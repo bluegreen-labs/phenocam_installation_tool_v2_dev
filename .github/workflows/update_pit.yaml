@@ -37,4 +37,4 @@ jobs:
           git add PIT.sh
           git commit -m "update PIT"
           
-          git push
+          #git push
