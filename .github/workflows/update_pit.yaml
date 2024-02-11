@@ -1,0 +1,21 @@
+name: Update PIT code
+
+# Controls when the action will run.
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  release:
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "update"
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update components
+        run: |
+          ./update_script.sh
+          git commit -am "update script"
+          git push

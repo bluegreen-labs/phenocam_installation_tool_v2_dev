@@ -1,7 +1,6 @@
 name: PIT public deploy workflow
 
 on:
-  release:
   workflow_dispatch:
 
 jobs:
@@ -17,4 +16,4 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/bluegreen-labs/phenocam_installation_tool_v2/dispatches \
-            -d '{"ref":"main"}'
+            -d '{"ref":"release"}'
