@@ -111,6 +111,9 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	# set the main picture taking routine
 	echo "${interval} ${cron_start}-${cron_end} * * * sh /mnt/cfg1/scripts/phenocam_upload.sh" > /mnt/cfg1/schedule/admin
 	
+	# take picture on reboot
+	echo "@reboot sh /mnt/cfg1/scripts/phenocam_upload.sh" >> /mnt/cfg1/schedule/admin
+	
 	# upload ip address info
 	echo "59 11 * * * sh /mnt/cfg1/scripts/phenocam_ip_table.sh" >> /mnt/cfg1/schedule/admin
 		
