@@ -60,17 +60,9 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
         pass=`awk 'NR==1' /mnt/cfg1/.password`
 
-	#----- set time zone offset (from UTC)
+	#----- set time zone offset (from GMT)
 	
-	# set time zone
-	# dump setting to config file
-	SIGN=`echo ${time_offset} | cut -c'1'`
-
-	if [ "$SIGN" = "+" ]; then
-	 echo "GMT${time_offset}" | sed 's/+/-/g' > /var/TZ
-	else
-	 echo "GMT${time_offset}" | sed 's/-/+/g' > /var/TZ
-	fi
+	/mnt/cfg1/scripts/./set_time_zone.sh
 	
 	#----- set overlay
 	
@@ -111,8 +103,11 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	# set the main picture taking routine
 	echo "${interval} ${cron_start}-${cron_end} * * * sh /mnt/cfg1/scripts/phenocam_upload.sh" > /mnt/cfg1/schedule/admin
 	
+	# upon reboot set time zone
+	echo "@reboot sleep 60 && sh /mnt/cfg1/scripts/set_time_zone.sh" > /mnt/cfg1/schedule/root
+	
 	# take picture on reboot
-	echo "@reboot sh /mnt/cfg1/scripts/phenocam_upload.sh" >> /mnt/cfg1/schedule/admin
+	echo "@reboot sleep 120 && sh /mnt/cfg1/scripts/phenocam_upload.sh" >> /mnt/cfg1/schedule/admin
 	
 	# upload ip address info
 	echo "59 11 * * * sh /mnt/cfg1/scripts/phenocam_ip_table.sh" >> /mnt/cfg1/schedule/admin

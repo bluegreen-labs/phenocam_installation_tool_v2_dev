@@ -77,8 +77,8 @@ command="
  echo ${end} >> /mnt/cfg1/settings.txt &&
  echo ${int} >> /mnt/cfg1/settings.txt &&
  echo '225' >> /mnt/cfg1/settings.txt &&
- echo '130' >> /mnt/cfg1/settings.txt &&
- echo '230' >> /mnt/cfg1/settings.txt &&
+ echo '125' >> /mnt/cfg1/settings.txt &&
+ echo '205' >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 

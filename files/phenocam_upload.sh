@@ -149,3 +149,7 @@ rm *.meta
 # Reset to VIS
 /usr/sbin/set_ir.sh 0
 
+#------- FEEDBACK ON ACTIVITY -----------
+cat "last upload at:" >> /var/tmp/log.txt
+cat date >> /var/tmp/log.txt
+
