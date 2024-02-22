@@ -70,10 +70,3 @@ https://phenocam.nau.edu/webcam/sites/YOURCAMERANAME/
 ```
 
 This can take some time as the PhenoCam servers take some time to update.
-
-## License
-
-```
-Copyright (c) 2023 - present BlueGreen Labs
-All rights reserved
-```
