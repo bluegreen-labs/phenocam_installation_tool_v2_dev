@@ -3,7 +3,7 @@
 tar -cf install files/*
 
 cat PITe.sh > PIT.sh
-base64 install >> PIT.sh
+cat install >> PIT.sh
 
 rm install*
 
