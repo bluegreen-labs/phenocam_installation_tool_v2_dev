@@ -27,9 +27,6 @@ model="NetCam%20Live2"
 # and where to put config files
 host='phenocam.nau.edu'
 
-# start logging
-echo "----- ${today} -----" > /var/tmp/log.txt
-
 # create default server
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
   echo ${host} > /mnt/cfg1/server.txt
@@ -43,6 +40,9 @@ fi
 # upon reboot will then be run.
 
 if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then 
+
+	# start logging
+	echo "----- ${today} -----" > /var/tmp/log.txt
 
 	#----- read in settings
 	if [ -f '/mnt/cfg1/settings.txt' ]; then
@@ -67,18 +67,27 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 
 	# note the weird flip in the netcam cameras
 	if [ "$SIGN" = "+" ]; then
-	 time_offset=`echo "GMT${time_offset}" | sed 's/+/%2D/g'`
+	 TZ=`echo "GMT${time_offset}" | sed 's/+/%2D/g'`
 	else
-	 time_offset=`echo "GMT${time_offset}" | sed 's/-/%2B/g'`
+	 TZ=`echo "GMT${time_offset}" | sed 's/-/%2B/g'`
 	fi
 
 	# call API to set the time 
-	wget http://admin:${pass}@127.0.0.1/vb.htm?timezone=${time_offset}
+	wget http://admin:${pass}@127.0.0.1/vb.htm?timezone=${TZ}
 	
 	# clean up detritus
 	rm vb*
 	
+	echo "time set to (ascii format): ${TZ}" >> /var/tmp/log.txt
+	
 	#----- set overlay
+	
+	# convert to ascii
+	if [ "$SIGN" = "+" ]; then
+	 time_offset=`echo "${time_offset}" | sed 's/+/%2B/g'`
+	else
+	 time_offset=`echo "${time_offset}" | sed 's/-/%2D/g'`
+	fi
 	
 	# overlay text
 	overlay_text="${camera}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
@@ -88,6 +97,8 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	
 	# clean up detritus
 	rm vb*
+	
+	echo "header set to: ${overlay_text}" >> /var/tmp/log.txt
 	
 	#----- set colour settings
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
@@ -133,6 +144,9 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 		
 	# reboot at midnight
 	echo "59 23 * * * reboot" >> /mnt/cfg1/schedule/admin
+	
+	# info
+	echo "Finished initial setup" >> /var/tmp/log.txt
 
 fi
 
@@ -141,9 +155,6 @@ fi
 # this file is manually set to TRUE which
 # would rerun the install routine upon reboot
 echo "FALSE" > /mnt/cfg1/update.txt
-
-echo "Finished initial setup" >> /var/tmp/log.txt
-echo "----" >> /var/tmp/log.txt
 
 exit 0
 

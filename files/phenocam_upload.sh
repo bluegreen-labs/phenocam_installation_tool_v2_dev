@@ -75,6 +75,7 @@ DELAY=30
 
 # grab date - keep fixed for RGB and IR uploads
 DATE=`date +"%a %b %d %Y %H:%M:%S"`
+DATE_overlay=`echo ${DATE} | sed 's/ /%20/g'`
 
 # grap date and time string to be inserted into the
 # ftp scripts - this coordinates the time stamps
@@ -109,7 +110,7 @@ echo "time_zone=$tz" >> /var/tmp/metadata.txt
 # -------------- SET FIXED DATE TIME HEADER -------------------------
 
 # overlay text
-overlay_text="${SITENAME}%20-%20${model}%20-%20${DATE}%20-%20GMT${time_offset}"
+overlay_text="${SITENAME}%20-%20${model}%20-%20${DATE_overlay}%20-%20GMT${time_offset}"
 	
 # for now disable the overlay
 wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
@@ -181,7 +182,7 @@ rm *.meta
 # -------------- SET NORMAL HEADER ----------------------------------
 
 # overlay text
-overlay_text="${camera}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
+overlay_text="${SITENAME}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
 	
 # for now disable the overlay
 wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
