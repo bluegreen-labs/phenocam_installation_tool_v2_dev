@@ -21,7 +21,7 @@ chmod a+rwx /mnt/cfg1/scripts/*
 today=`date +"%Y %m %d %H:%M:%S"`
 
 # set camera model name
-model="NetCam Live2 "
+model="NetCam%20Live2"
 
 # upload / download server - location from which to grab and
 # and where to put config files
@@ -62,13 +62,32 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 
 	#----- set time zone offset (from GMT)
 	
-	/mnt/cfg1/scripts/./set_time_zone.sh
+	# set sign time zone
+	SIGN=`echo ${time_offset} | cut -c'1'`
+
+	# note the weird flip in the netcam cameras
+	if [ "$SIGN" = "+" ]; then
+	 time_offset=`echo "GMT${time_offset}" | sed 's/+/%2D/g'`
+	else
+	 time_offset=`echo "GMT${time_offset}" | sed 's/-/%2B/g'`
+	fi
+
+	# call API to set the time 
+	wget http://admin:${pass}@127.0.0.1/vb.htm?timezone=${time_offset}
+	
+	# clean up detritus
+	rm vb*
 	
 	#----- set overlay
 	
+	# overlay text
+	overlay_text="${camera}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
+	
 	# for now disable the overlay
-	wget http://admin:${pass}@127.0.0.1/vb.htm?textenable1=0
-	find . -name vb.htm* -delete
+	wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
+	
+	# clean up detritus
+	rm vb*
 	
 	#----- set colour settings
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}

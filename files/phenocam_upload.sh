@@ -37,16 +37,32 @@ capture () {
 
 }
 
-
 # -------------- SETTINGS -------------------------------------------
 
 # read in configuration settings
 # grab sitename
 SITENAME=`awk 'NR==1' /mnt/cfg1/settings.txt`
 
+# grab time offset / local time zone
+# and convert +/- to ascii
+time_offset=`awk 'NR==2' /mnt/cfg1/settings.txt`
+SIGN=`echo ${time_offset} | cut -c'1'`
+
+if [ "$SIGN" = "+" ]; then
+ time_offset=`echo "${time_offset}" | sed 's/+/%2B/g'`
+else
+ time_offset=`echo "${time_offset}" | sed 's/-/%2D/g'`
+fi
+
+# set camera model name
+model="NetCam%20Live2"
+
 # how many servers do we upload to
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
 nrservers=`awk -v var=${nrservers} 'BEGIN{ n=1; while (n <= var ) { print n; n++; } }' | tr '\n' ' '`
+
+# grab password
+pass=`awk 'NR==1' /mnt/cfg1/.password`
 
 # Move into temporary directory
 # which resides in RAM, not to
@@ -89,6 +105,17 @@ echo "model=NetCam Live2" > /var/tmp/metadata.txt
 echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
 echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
 echo "time_zone=$tz" >> /var/tmp/metadata.txt
+
+# -------------- SET FIXED DATE TIME HEADER -------------------------
+
+# overlay text
+overlay_text="${SITENAME}%20-%20${model}%20-%20${DATE}%20-%20GMT${time_offset}"
+	
+# for now disable the overlay
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
+
+# clean up detritus
+rm vb*
 
 # -------------- UPLOAD VIS -----------------------------------------
 
@@ -149,7 +176,20 @@ rm *.meta
 # Reset to VIS
 /usr/sbin/set_ir.sh 0
 
-#------- FEEDBACK ON ACTIVITY -----------
+# reset the overlay to be dynamic
+
+# -------------- SET NORMAL HEADER ----------------------------------
+
+# overlay text
+overlay_text="${camera}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
+	
+# for now disable the overlay
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
+
+# clean up detritus
+rm vb*
+
+#------- FEEDBACK ON ACTIVITY ---------------------------------------
 cat "last upload at:" >> /var/tmp/log.txt
 cat date >> /var/tmp/log.txt
 
