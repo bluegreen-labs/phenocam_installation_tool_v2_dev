@@ -21,7 +21,7 @@ chmod a+rwx /mnt/cfg1/scripts/*
 today=`date +"%Y %m %d %H:%M:%S"`
 
 # set camera model name
-model="NetCam%20Live2"
+model="NetCam Live2"
 
 # upload / download server - location from which to grab and
 # and where to put config files
@@ -90,7 +90,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	fi
 	
 	# overlay text
-	overlay_text="${camera}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
+	overlay_text=`echo "${camera} - ${model} - %a %b %d %Y %H:%M:%S - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 	# for now disable the overlay
 	wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}

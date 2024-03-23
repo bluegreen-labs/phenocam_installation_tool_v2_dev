@@ -55,7 +55,7 @@ else
 fi
 
 # set camera model name
-model="NetCam%20Live2"
+model="NetCam Live2"
 
 # how many servers do we upload to
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
@@ -75,7 +75,6 @@ DELAY=30
 
 # grab date - keep fixed for RGB and IR uploads
 DATE=`date +"%a %b %d %Y %H:%M:%S"`
-DATE_overlay=`echo ${DATE} | sed 's/ /%20/g'`
 
 # grap date and time string to be inserted into the
 # ftp scripts - this coordinates the time stamps
@@ -102,7 +101,7 @@ tz=`cat /var/TZ`
 # create base meta-data file from configuration settings
 # and the fixed parameters
 echo "model=NetCam Live2" > /var/tmp/metadata.txt
- /mnt/cfg1/scripts/chls >> /var/tmp/metadata.txt
+/mnt/cfg1/scripts/chls >> /var/tmp/metadata.txt
 echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
 echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
 echo "time_zone=$tz" >> /var/tmp/metadata.txt
@@ -110,7 +109,7 @@ echo "time_zone=$tz" >> /var/tmp/metadata.txt
 # -------------- SET FIXED DATE TIME HEADER -------------------------
 
 # overlay text
-overlay_text="${SITENAME}%20-%20${model}%20-%20${DATE_overlay}%20-%20GMT${time_offset}"
+overlay_text=`echo "${SITENAME} - ${model} - ${DATE} - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
 wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
@@ -177,12 +176,10 @@ rm *.meta
 # Reset to VIS
 /usr/sbin/set_ir.sh 0
 
-# reset the overlay to be dynamic
-
 # -------------- SET NORMAL HEADER ----------------------------------
 
 # overlay text
-overlay_text="${SITENAME}%20-%20${model}%20-%20%a%20%b%20%d%20%Y%20%H:%M:%S%20-%20GMT${time_offset}"
+overlay_text=`echo "${SITENAME} - ${model} - %a %b %d %Y %H:%M:%S - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
 wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
@@ -191,6 +188,6 @@ wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
 rm vb*
 
 #------- FEEDBACK ON ACTIVITY ---------------------------------------
-cat "last upload at:" >> /var/tmp/log.txt
-cat date >> /var/tmp/log.txt
+echo "last upload at:" >> /var/tmp/log.txt
+echo date >> /var/tmp/log.txt
 

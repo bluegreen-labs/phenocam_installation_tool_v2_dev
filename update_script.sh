@@ -8,7 +8,7 @@ base64 install >> PIT.sh
 rm install*
 chmod +x PIT.sh
 
-# exit 0
+#exit 0
 
 # move files into public repo
 if [ -d "../phenocam_installation_tool_v2/" ];
