@@ -28,10 +28,10 @@ capture () {
  METADATETIME=`date -Iseconds`
 
  # grab the exposure time and append to meta-data
- exposure=`/usr/sbin/get_exp` | cut -d ' ' -f4
+ exposure=`/usr/sbin/get_exp | cut -d ' ' -f4`
 
  cat metadata.txt >> /var/tmp/${metafile}
- echo "exposure=$exposure" >> /var/tmp/${metafile}
+ echo "exposure=${exposure}" >> /var/tmp/${metafile}
  echo "ir_enable=$ir" >> /var/tmp/${metafile}
  echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
 
