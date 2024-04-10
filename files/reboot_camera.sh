@@ -8,10 +8,11 @@
 #
 #--------------------------------------------------------------------
 
-pass=$1
+# grab password
+pass=`awk 'NR==1' /mnt/cfg1/.password`
 
-# sleep 15 seconds and trigger reboot
-sleep 12
+# sleep 15 seconds
+sleep 15
 
 # move into temporary directory
 cd /var/tmp

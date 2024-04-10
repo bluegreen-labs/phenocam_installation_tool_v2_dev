@@ -86,6 +86,7 @@ command="
  rm -rf /var/tmp/files &&
  echo '#!/bin/sh' > /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&
+ echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
  echo '' &&
  echo ' Successfully uploaded install instructions!' &&
  echo '' &&
@@ -93,7 +94,7 @@ command="
  echo '' &&
  echo '====================================================================' &&
  echo '' &&
- sh /mnt/cfg1/scripts/reboot_camera.sh ${pass}
+ sh /mnt/cfg1/scripts/reboot_camera.sh
 "
 
 # install command

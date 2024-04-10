@@ -189,5 +189,5 @@ rm vb*
 
 #------- FEEDBACK ON ACTIVITY ---------------------------------------
 echo "last upload at:" >> /var/tmp/log.txt
-echo date >> /var/tmp/log.txt
+echo $DATE >> /var/tmp/log.txt
 
