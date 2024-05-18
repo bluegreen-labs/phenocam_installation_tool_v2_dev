@@ -96,6 +96,19 @@ connection=`ping -q -c 1 8.8.8.8 > /dev/null && echo ok || echo error`
 # grab time zone
 tz=`cat /var/TZ`
 
+# get SD card presence
+SDCARD=`df | grep "mmc" | wc -l`
+
+# backup to SD card when inserted
+# runs on phenocam upload rather than install
+# to allow hot-swapping of cards
+if [ "$SDCARD" -eq 1 ]; then
+ 
+ # create backup directory
+ mkdir -p /mnt/mmc/phenocam_backup/
+ 
+fi
+
 # grab the colour balance settings!!!
 
 # create base meta-data file from configuration settings
@@ -117,66 +130,77 @@ wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
 # clean up detritus
 rm vb*
 
-# -------------- UPLOAD VIS -----------------------------------------
+# -------------- UPLOAD DATA ----------------------------------------
 
-# create filenames
-metafile=`echo ${SITENAME}_${DATETIMESTRING}.meta`
-image=`echo ${SITENAME}_${DATETIMESTRING}.jpg`
+# we use two states to indicate VIS (0) and NIR (1) states
+# and use a for loop to cycle through these states and
+# upload the data
 
-capture $image $metafile $DELAY 0
+for state in 0 1; do
 
-# run the upload script for the ip data
-# and for all servers
-for i in $nrservers;
-do
- SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
+ if [ "$state" -eq 0 ]; then
+
+  # create VIS filenames
+  metafile=`echo ${SITENAME}_${DATETIMESTRING}.meta`
+  image=`echo ${SITENAME}_${DATETIMESTRING}.jpg`
+  capture $image $metafile $DELAY 0
+
+ else
+
+  # create NIR filenames
+  metafile=`echo ${SITENAME}_IR_${DATETIMESTRING}.meta`
+  image=`echo ${SITENAME}_IR_${DATETIMESTRING}.jpg`
+  capture $image $metafile $DELAY 1
+ fi
+
+ # run the upload script for the ip data
+ # and for all servers
+ for i in $nrservers;
+ do
+  SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
  
- echo "uploading to: ${SERVER}"
-
- # upload image
- echo "uploading VIS image ${image}"
- ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image}
+  echo "uploading to: ${SERVER}"
+ 
+  # if key file exists use SFTP
+  if [ -f "/mnt/cfg1/.key" ]; then
+   echo "using SFTP"
+  
+   echo "put ${image} data/${SITENAME}/${image}" > batchfile
+   echo "put ${metafile} data/${SITENAME}/${metafile}" >> batchfile
+  
+   # upload the data
+   sftp -b batchfile -i "/mnt/cfg1/.key" ${SITENAME}@${SERVER}
+    
+  else
+   echo "defaulting to SFTP, check your key"
+  
+   # upload image
+   echo "uploading image ${image} (state: ${state})"
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image}
 	
- echo "uploading VIS meta-data ${metafile}"
- ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile}
+   echo "uploading meta-data ${metafile} (state: ${state})"
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile}
+
+  fi
+ done
+
+ # backup to SD card when inserted
+ if [ "$SDCARD" -eq 1 ]; then 
+  cp ${image} /mnt/mmc/phenocam_backup/${image}
+  cp ${metafile} /mnt/mmc/phenocam_backup/${metafile}
+ fi
+
+ # clean up files
+ rm *.jpg
+ rm *.meta
+ rm batchfile
 
 done
 
-# clean up files
-rm *.jpg
-rm *.meta
-
-# -------------- UPLOAD NIR -----------------------------------------
-
-# create filenames
-metafile=`echo ${SITENAME}_IR_${DATETIMESTRING}.meta`
-image=`echo ${SITENAME}_IR_${DATETIMESTRING}.jpg`
-
-capture $image $metafile $DELAY 1
-
-# run the upload script for the ip data
-# and for all servers
-for i in $nrservers;
-do
- SERVER=`awk -v p=${i} 'NR==p' /mnt/cfg1/server.txt`
-
- # upload image
- echo "uploading NIR image ${image}"
- ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${image} ${image}
-	
- echo "uploading NIR meta-data ${metafile}"
- ftpput ${SERVER} -u "anonymous" -p "anonymous"  data/${SITENAME}/${metafile} ${metafile}
-
-done
-
-# clean up files
-rm *.jpg
-rm *.meta
-
-# Reset to VIS
+# Reset to VIS as default
 /usr/sbin/set_ir.sh 0
 
-# -------------- SET NORMAL HEADER ----------------------------------
+#-------------- RESET NORMAL HEADER --------------------------------
 
 # overlay text
 overlay_text=`echo "${SITENAME} - ${model} - %a %b %d %Y %H:%M:%S - GMT${time_offset}" | sed 's/ /%20/g'`

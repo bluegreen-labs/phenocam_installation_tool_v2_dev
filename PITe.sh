@@ -31,16 +31,16 @@ usage() {
   [-i <camera ip address>]
   [-p <camera password>]
   [-n <camera name>]
-  [-o <time offset from UTC>] 
-  [-t <time zone>] 
+  [-o <time offset from UTC/GMT>]
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
   [-m <interval minutes>]
+  [-k <sftp private key>]
   " 1>&2; exit 0;
  }
 
 # grab arguments
-while getopts ":hi:p:n:o:t:s:e:m:d:" option;
+while getopts ":hi:p:n:o:t:s:e:m:k:d:" option;
 do
     case "${option}"
         in
@@ -48,10 +48,10 @@ do
         p) pass=${OPTARG} ;;
         n) name=${OPTARG} ;;
         o) offset=${OPTARG} ;;
-        t) tz=${OPTARG} ;;
         s) start=${OPTARG} ;;
         e) end=${OPTARG} ;;
-        m) int=${OPTARG} ;;                
+        m) int=${OPTARG} ;;
+        k) key=${OPTARG} ;;
         h | *) usage; exit 0 ;;
     esac
 done
@@ -61,12 +61,26 @@ echo "===================================================================="
 echo ""
 echo " Running the installation script on the NetCam Live2 camera!"
 echo ""
-echo " (c) BlueGreen Labs 2024"
+echo " (c) BlueGreen Labs (BV) 2024"
 echo " -----------------------------------------------------------"
 echo ""
 echo " Uploading installation files, please approve this transaction by"
 echo " by confirming the password!"
 echo ""
+
+# Default to GMT time zone
+tz="GMT"
+
+if [ -f "${key}" ]; then
+ # print the content of the path to the
+ # key and assign to a variable
+ private_key=`cat ${key}`
+ echo "Private key provided, using secure SFTP!"
+ has_key="TRUE"
+else
+ echo "No private key provided, defaulting to insecure FTP!"
+ has_key="FALSE"
+fi
 
 command="
  echo TRUE > /mnt/cfg1/update.txt &&
@@ -80,6 +94,7 @@ command="
  echo '125' >> /mnt/cfg1/settings.txt &&
  echo '205' >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
+ if [ ${has_key} = "TRUE" ]; then echo '${private_key}' > /mnt/cfg1/.key; fi && 
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
@@ -89,6 +104,14 @@ command="
  echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
  echo '' &&
  echo ' Successfully uploaded install instructions!' &&
+ echo '' &&
+ echo 'Using the following settings:' &&
+ echo 'Sitename: ${name}' &&
+ echo 'Time Zone (GMT): ${tz}' &&
+ echo 'Upload start: ${start}' &&
+ echo 'Upload end: ${end}' &&
+ echo 'Upload interval: ${int}' &&
+ echo 'FTP mode:' &&
  echo '' &&
  echo ' --> Reboot the camera by cycling the power or wait 10 seconds! <-- ' &&
  echo '' &&
