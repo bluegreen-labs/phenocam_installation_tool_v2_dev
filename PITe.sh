@@ -71,10 +71,10 @@ tz="GMT"
 if [ -f "${key}" ]; then
  # print the content of the path to the
  # key and assign to a variable
- private_key=`cat ${key}`
  echo " Private key provided, using secure SFTP!"
  echo ""
  has_key="TRUE"
+ private_key=`awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' ${key}`
 else
  echo " No private key provided, defaulting to insecure FTP!"
  echo ""
@@ -99,7 +99,7 @@ command="
  echo '205' >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
  rm -rf /mnt/cfg1/.key &&
- if [ ${has_key} = "TRUE" ]; then echo '${private_key}' > /mnt/cfg1/.key; fi && 
+ if [ ${has_key} = 'TRUE' ]; then echo ${private_key} | sed 's/\\n/\n/g' > /mnt/cfg1/.key; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
@@ -117,7 +117,7 @@ command="
  echo 'Upload end: ${end}' &&
  echo 'Upload interval: ${int}' &&
  echo '' &&
- echo ' --> Reboot the camera by cycling the power or wait 10 seconds! <-- ' &&
+ echo ' --> Reboot the camera by cycling the power or wait 20 seconds! <-- ' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&

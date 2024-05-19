@@ -11,8 +11,8 @@
 # grab password
 pass=`awk 'NR==1' /mnt/cfg1/.password`
 
-# sleep 15 seconds
-sleep 15
+# sleep 20 seconds
+sleep 20
 
 # move into temporary directory
 cd /var/tmp
