@@ -107,7 +107,7 @@ command="
  echo '' &&
  echo 'Using the following settings:' &&
  echo 'Sitename: ${name}' &&
- echo 'Time Zone (GMT): ${tz}' &&
+ echo 'GMT timezone offset: ${offset}' &&
  echo 'Upload start: ${start}' &&
  echo 'Upload end: ${end}' &&
  echo 'Upload interval: ${int}' &&

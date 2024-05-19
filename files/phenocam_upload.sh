@@ -109,8 +109,6 @@ if [ "$SDCARD" -eq 1 ]; then
  
 fi
 
-# grab the colour balance settings!!!
-
 # create base meta-data file from configuration settings
 # and the fixed parameters
 echo "model=NetCam Live2" > /var/tmp/metadata.txt
@@ -135,8 +133,10 @@ rm vb*
 # we use two states to indicate VIS (0) and NIR (1) states
 # and use a for loop to cycle through these states and
 # upload the data
+states="0 1"
 
-for state in 0 1; do
+for state in $states;
+do
 
  if [ "$state" -eq 0 ]; then
 
@@ -151,6 +151,7 @@ for state in 0 1; do
   metafile=`echo ${SITENAME}_IR_${DATETIMESTRING}.meta`
   image=`echo ${SITENAME}_IR_${DATETIMESTRING}.jpg`
   capture $image $metafile $DELAY 1
+ 
  fi
 
  # run the upload script for the ip data
@@ -170,9 +171,12 @@ for state in 0 1; do
   
    # upload the data
    sftp -b batchfile -i "/mnt/cfg1/.key" ${SITENAME}@${SERVER}
-    
+   
+   # remove batch file
+   rm batchfile
+   
   else
-   echo "defaulting to SFTP, check your key"
+   echo "defaulting to FTP, check your key"
   
    # upload image
    echo "uploading image ${image} (state: ${state})"
@@ -193,7 +197,6 @@ for state in 0 1; do
  # clean up files
  rm *.jpg
  rm *.meta
- rm batchfile
 
 done
 
