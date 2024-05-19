@@ -61,7 +61,7 @@ echo "===================================================================="
 echo ""
 echo " Running the installation script on the NetCam Live2 camera!"
 echo ""
-echo " (c) BlueGreen Labs (BV) 2024"
+echo " (c) BlueGreen Labs (BV) 2024 - https://bluegreenlabs.org"
 echo " -----------------------------------------------------------"
 echo ""
 
@@ -74,7 +74,7 @@ if [ -f "${key}" ]; then
  echo " Private key provided, using secure SFTP!"
  echo ""
  has_key="TRUE"
- private_key=`awk 'NF {sub(/\r/, ""); printf "%s\\\n",$0;}' ${key}`
+ private_key=`awk 'NF {sub(/\r/, ""); printf "%s\\\\n",$0;}' ${key}`
 else
  echo " No private key provided, defaulting to insecure FTP!"
  echo ""
@@ -99,7 +99,7 @@ command="
  echo '205' >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
  rm -rf /mnt/cfg1/.key &&
- if [ ${has_key} = 'TRUE' ]; then echo ${private_key} | sed 's/\\n/\n/g' > /mnt/cfg1/.key; fi &&
+ if [ ${has_key} = 'TRUE' ]; then echo '${private_key}' | sed 's/\\\n/\n/g' > /mnt/cfg1/.key; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
