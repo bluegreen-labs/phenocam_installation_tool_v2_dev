@@ -64,9 +64,6 @@ echo ""
 echo " (c) BlueGreen Labs (BV) 2024"
 echo " -----------------------------------------------------------"
 echo ""
-echo " Uploading installation files, please approve this transaction by"
-echo " by confirming the password!"
-echo ""
 
 # Default to GMT time zone
 tz="GMT"
@@ -75,12 +72,19 @@ if [ -f "${key}" ]; then
  # print the content of the path to the
  # key and assign to a variable
  private_key=`cat ${key}`
- echo "Private key provided, using secure SFTP!"
+ echo " Private key provided, using secure SFTP!"
+ echo ""
  has_key="TRUE"
 else
- echo "No private key provided, defaulting to insecure FTP!"
+ echo " No private key provided, defaulting to insecure FTP!"
+ echo ""
  has_key="FALSE"
 fi
+
+# message on confirming the password
+echo " Uploading installation files, please approve this transaction by"
+echo " by confirming the password!"
+echo ""
 
 command="
  echo TRUE > /mnt/cfg1/update.txt &&
@@ -94,6 +98,7 @@ command="
  echo '125' >> /mnt/cfg1/settings.txt &&
  echo '205' >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
+ rm -rf /mnt/cfg1/.key &&
  if [ ${has_key} = "TRUE" ]; then echo '${private_key}' > /mnt/cfg1/.key; fi && 
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
@@ -111,7 +116,6 @@ command="
  echo 'Upload start: ${start}' &&
  echo 'Upload end: ${end}' &&
  echo 'Upload interval: ${int}' &&
- echo 'FTP mode:' &&
  echo '' &&
  echo ' --> Reboot the camera by cycling the power or wait 10 seconds! <-- ' &&
  echo '' &&
