@@ -130,7 +130,7 @@ if [ "${retrieve}" ]; then
    rm -rf phenocam_key
   else
    echo ""
-   echo " A valid key was found and stored in phenocam_key"
+   echo " A valid key was found and stored locally in phenocam_key"
    echo "--------------------------------------------------------------------"
    
    # plot the key to file
@@ -162,7 +162,7 @@ if [ "${retrieve}" ]; then
    rm -rf phenocam_key.pub
   else
    echo ""
-   echo " A valid key was found and stored in phenocam_key"
+   echo " A valid key was found and stored locally in phenocam_key.pub"
    echo "--------------------------------------------------------------------"
    
    # plot the key to file

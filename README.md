@@ -43,11 +43,28 @@ git clone https://github.com/bluegreen-labs/phenocam_installation_tool_v2.git
 In the (unzipped) project directory you can then execute the below commands. The installation tool uses the following syntax
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password -k /your/path/key.txt
-
+./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password
 ```
 
-with:
+to enable sFTP support (key based login and encrypted transfers) use:
+
+```bash
+./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password -k TRUE
+```
+
+To retrieve the current login keys use:
+
+```bash
+./PIT.sh -i 192.168.1.xxx -r TRUE
+```
+
+To purge all settings and scripts use:
+
+```bash
+./PIT.sh -i 192.168.1.xxx -x TRUE
+```
+
+Where all parameters are listed as:
 
 | Parameter     | Description |
 | ------------- | ------------------------------ |
@@ -58,7 +75,9 @@ with:
 | -s            | first hour of the scheduled image acquisitions (e.g. 4 in the morning) |
 | -e            | last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation) |
 | -m            | interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
-| -k            | path to a private key file (when using sFTP, when not provided defaults to FTP) |
+| -k            | set sFTP key (TRUE or FALSE) use this option to enable sFTP |
+| -r            | retrieve previously installed login keys from the camera |
+| -x            | purge all settings and scripts from the camera (soft reset) |
 
 Once successfully configured make sure the router or camera has internet access. Wait until the camera uploads its first images to the phenocam server by verifying the webpage associated with your camera at:
 
@@ -66,7 +85,9 @@ Once successfully configured make sure the router or camera has internet access.
 https://phenocam.nau.edu/webcam/sites/YOURCAMERANAME/
 ```
 
-This can take some time as the PhenoCam servers take some time to update.
+If you use key based logins (sFTP) you will have to forward the public key `phenocam_key.pub` created in your current directory. This key will have to be manually copied, which might take some time.
+
+In both cases the first images might not appear until a day or two after the installation (especially with key based logins), please be patient and do not run the installation script again.
 
 ### Backups and offline use
 
