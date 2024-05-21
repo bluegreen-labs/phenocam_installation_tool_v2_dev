@@ -1,8 +1,5 @@
 # PhenoCam Installation Tool (PIT) v2
 
-> [!note]
-> This is a pre-release version and should not be actively used in the deployment of PhenoCams
-
 PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam network. This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
 
 > [!warning]
@@ -46,7 +43,7 @@ git clone https://github.com/bluegreen-labs/phenocam_installation_tool_v2.git
 In the (unzipped) project directory you can then execute the below commands. The installation tool uses the following syntax
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -n testcam -o 1 -t GMT -s 9 -e 22 -m 13
+./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password -k /your/path/key.txt
 
 ```
 
@@ -58,10 +55,10 @@ with:
 | -p            | camera password |
 | -n            | the name of the camera / site |
 | -o            | difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC) |
-| -t            | a text string corresponding to the local time zone (e.g. EST) |
 | -s            | first hour of the scheduled image acquisitions (e.g. 4 in the morning) |
 | -e            | last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation) |
 | -m            | interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30) |
+| -k            | path to a private key file (when using sFTP, when not provided defaults to FTP) |
 
 Once successfully configured make sure the router or camera has internet access. Wait until the camera uploads its first images to the phenocam server by verifying the webpage associated with your camera at:
 
@@ -70,3 +67,8 @@ https://phenocam.nau.edu/webcam/sites/YOURCAMERANAME/
 ```
 
 This can take some time as the PhenoCam servers take some time to update.
+
+### Backups and offline use
+
+If a micro-SD card is inserted in the back of the camera all images will be backed up by default to this card in the `phenocam_backup` directory. The card size is limited to 32GB (standard camera/cellphone cards should work). Cards are hot swappable, meaning you can remove a card without further action and replace it with a different one. This allows easy data retrieval in the field (using two cards in rotation). If you are on an unstable internet connection it might be beneficial to use SD cards as backups, so data can be backfilled from storage media.
+
