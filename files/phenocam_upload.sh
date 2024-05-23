@@ -166,8 +166,8 @@ do
   if [ -f "/mnt/cfg1/phenocam_key" ]; then
    echo "using SFTP"
   
-   echo "put ${image} data/${SITENAME}/${image}" > batchfile
-   echo "put ${metafile} data/${SITENAME}/${metafile}" >> batchfile
+   echo "PUT ${image} data/${SITENAME}/${image}" > batchfile
+   echo "PUT ${metafile} data/${SITENAME}/${metafile}" >> batchfile
   
    # upload the data
    sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER}
