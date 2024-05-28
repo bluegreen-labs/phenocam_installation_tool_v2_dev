@@ -218,3 +218,6 @@ rm vb*
 echo "last upload at:" >> /var/tmp/log.txt
 echo $DATE >> /var/tmp/log.txt
 
+#------- FILE PERMISSIONS -------------------------------------------
+chmod a+rw /var/tmp/*
+
