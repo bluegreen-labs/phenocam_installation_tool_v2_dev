@@ -30,7 +30,7 @@ capture () {
  # grab the exposure time and append to meta-data
  exposure=`/usr/sbin/get_exp | cut -d ' ' -f4`
 
- cat metadata.txt >> /var/tmp/${metafile}
+ #cat metadata.txt >> /var/tmp/${metafile}
  echo "exposure=${exposure}" >> /var/tmp/${metafile}
  echo "ir_enable=$ir" >> /var/tmp/${metafile}
  echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
@@ -109,14 +109,6 @@ if [ "$SDCARD" -eq 1 ]; then
  
 fi
 
-# create base meta-data file from configuration settings
-# and the fixed parameters
-echo "model=NetCam Live2" > /var/tmp/metadata.txt
-/mnt/cfg1/scripts/chls >> /var/tmp/metadata.txt
-echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
-echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
-echo "time_zone=$tz" >> /var/tmp/metadata.txt
-
 # -------------- SET FIXED DATE TIME HEADER -------------------------
 
 # overlay text
@@ -127,6 +119,38 @@ wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
 
 # clean up detritus
 rm vb*
+
+# -------------- SET FIXED META-DATA -------------------------------
+
+# create base meta-data file from configuration settings
+# and the fixed parameters
+echo "model=NetCam Live2" > /var/tmp/metadata.txt
+/mnt/cfg1/scripts/chls >> /var/tmp/metadata.txt
+echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
+echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
+echo "time_zone=$tz" >> /var/tmp/metadata.txt
+echo "overlay_text=$overlay_text" >> /var/tmp/metadata.txt
+
+# colour balance settings
+red=`awk 'NR==7' /mnt/cfg1/settings.txt`
+green=`awk 'NR==8' /mnt/cfg1/settings.txt`
+blue=`awk 'NR==9' /mnt/cfg1/settings.txt` 
+brightness=`awk 'NR==10' /mnt/cfg1/settings.txt`
+sharpness=`awk 'NR==11' /mnt/cfg1/settings.txt`
+hue=`awk 'NR==12' /mnt/cfg1/settings.txt`
+contrast=`awk 'NR==13' /mnt/cfg1/settings.txt`	 
+saturation=`awk 'NR==14' /mnt/cfg1/settings.txt`
+blc=`awk 'NR==15' /mnt/cfg1/settings.txt`
+
+echo "red=$red" >> /var/tmp/metadata.txt
+echo "green=$green" >> /var/tmp/metadata.txt
+echo "blue=$blue" >> /var/tmp/metadata.txt
+echo "brightness=$brightness" >> /var/tmp/metadata.txt
+echo "contrast=$contrast" >> /var/tmp/metadata.txt
+echo "hue=$hue" >> /var/tmp/metadata.txt
+echo "sharpness=$sharpness" >> /var/tmp/metadata.txt
+echo "saturation=$saturation" >> /var/tmp/metadata.txt
+echo "backlight=$blc" >> /var/tmp/metadata.txt
 
 # -------------- UPLOAD DATA ----------------------------------------
 

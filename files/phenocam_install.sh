@@ -51,9 +51,19 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 cron_start=`awk 'NR==4' /mnt/cfg1/settings.txt`
 	 cron_end=`awk 'NR==5' /mnt/cfg1/settings.txt`
 	 cron_int=`awk 'NR==6' /mnt/cfg1/settings.txt`
+	 
+	 # colour balance
  	 red=`awk 'NR==7' /mnt/cfg1/settings.txt`
 	 green=`awk 'NR==8' /mnt/cfg1/settings.txt`
-	 blue=`awk 'NR==9' /mnt/cfg1/settings.txt` 
+	 blue=`awk 'NR==9' /mnt/cfg1/settings.txt`
+	 
+	 # read in the brightness/sharpness/hue/saturation values
+	 brightness=`awk 'NR==10' /mnt/cfg1/settings.txt`
+	 sharpness=`awk 'NR==11' /mnt/cfg1/settings.txt`
+	 hue=`awk 'NR==12' /mnt/cfg1/settings.txt`
+	 contrast=`awk 'NR==13' /mnt/cfg1/settings.txt`	 
+	 saturation=`awk 'NR==14' /mnt/cfg1/settings.txt`
+	 blc=`awk 'NR==15' /mnt/cfg1/settings.txt`
 	else
 	 echo "Settings file missing, aborting install routine!" >> /var/tmp/log.txt
 	fi
@@ -101,6 +111,18 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	echo "header set to: ${overlay_text}" >> /var/tmp/log.txt
 	
 	#----- set colour settings
+	
+	# call API to set the time 
+	wget http://admin:${pass}@127.0.0.1/vb.htm?brightness=${brightness}
+	wget http://admin:${pass}@127.0.0.1/vb.htm?contrast=${contrast}
+	wget http://admin:${pass}@127.0.0.1/vb.htm?sharpness=${sharpness}
+	wget http://admin:${pass}@127.0.0.1/vb.htm?hue=${hue}
+	wget http://admin:${pass}@127.0.0.1/vb.htm?saturation=${saturation}
+	
+	# clean up detritus
+	rm vb*
+		
+	# set RGB balance
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
 
 	#----- generate random number between 0 and the interval value

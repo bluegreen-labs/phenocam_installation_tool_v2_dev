@@ -18,7 +18,7 @@
 error_exit(){
   echo ""
   echo " NOTE: If no confirmation of a successful upload is provided,"
-  echo " check all script parameters!"
+  echo " check all script parameters."
   echo ""
   echo "===================================================================="
   exit 0
@@ -152,6 +152,17 @@ echo " Uploading installation files, please approve this"
 echo " by confirming the password!"
 echo ""
 
+# colour settings
+red="220"
+green="125"
+blue="220"
+brightness="128"
+contrast="128"
+sharpness="128"
+hue="128"
+saturation="100"
+backlight="0"
+
 command="
  echo TRUE > /mnt/cfg1/update.txt &&
  echo ${name} > /mnt/cfg1/settings.txt &&
@@ -160,9 +171,15 @@ command="
  echo ${start} >> /mnt/cfg1/settings.txt &&
  echo ${end} >> /mnt/cfg1/settings.txt &&
  echo ${int} >> /mnt/cfg1/settings.txt &&
- echo '225' >> /mnt/cfg1/settings.txt &&
- echo '125' >> /mnt/cfg1/settings.txt &&
- echo '205' >> /mnt/cfg1/settings.txt &&
+ echo ${red} >> /mnt/cfg1/settings.txt &&
+ echo ${green} >> /mnt/cfg1/settings.txt &&
+ echo ${blue} >> /mnt/cfg1/settings.txt &&
+ echo ${brightness} >> /mnt/cfg1/settings.txt &&
+ echo ${sharpness} >> /mnt/cfg1/settings.txt &&
+ echo ${hue} >> /mnt/cfg1/settings.txt &&
+ echo ${contrast} >> /mnt/cfg1/settings.txt &&
+ echo ${saturation} >> /mnt/cfg1/settings.txt &&
+ echo ${backlight} >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
  if [[ ${has_key} = 'TRUE' && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
@@ -173,14 +190,31 @@ command="
  echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
  echo '' &&
- echo ' Successfully uploaded install instructions!' &&
+ echo ' Successfully uploaded install instructions.' &&
+ echo ' The camera configuration will take effect on reboot.' &&
  echo '' &&
- echo ' Using the following settings:' &&
+ echo ' The following options have been set:' &&
+ echo ' ------------------------------------' &&
+ echo '' &&
  echo ' Sitename: ${name}' &&
  echo ' GMT timezone offset: ${offset}' &&
  echo ' Upload start: ${start}' &&
  echo ' Upload end: ${end}' &&
  echo ' Upload interval: ${int}' &&
+ echo ' Upload interval: ${int}' &&
+ echo '' &&
+ echo ' And the following colour settings:' &&
+ echo ' ----------------------------------' &&
+ echo '' &&
+ echo ' Red Gain: ${red}' &&
+ echo ' Green Gain: ${green}' &&
+ echo ' Blue Gain: ${blue}' &&
+ echo ' Brightness: ${brightness}' &&
+ echo ' Sharpness: ${sharpness}'&&
+ echo ' Hue: ${hue}' &&
+ echo ' Contrast: ${contrast}' &&
+ echo ' Saturation: ${saturation}' &&
+ echo ' Backlight: ${backlight}' &&
  echo '' &&
  if [ -f /mnt/cfg1/phenocam_key ]; then echo ' A private key exists or was generated, please run:'; fi &&
  if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ./PIT.sh ${ip} -r TRUE'; fi &&
