@@ -3,21 +3,22 @@
 PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam network. This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
 
 > [!warning]
-> The default password on the Stardot cameras is INSECURE. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min). 
+> The default password on the Stardot cameras is **INSECURE**. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min). 
 > 
 > To configure the camera: 
 > 1) hook up the camera to an unconnected router 
-> 2) change the default password to a strong password which is unlikely to be brute forced (i.e. 12+ characters in a mix of letters/numbers/special characters) 
-> 3) configure the camera using this software 
-> 4) connect the camera and verify uploads to the PhenoCam server.
+> 2) change the default password to a strong password which is unlikely to be brute forced (i.e. 12+ characters in a mix of letters/numbers/special characters)
+> 3) you can now connect to router/camera to a public facing network
+> 4) configure the camera using this software
+> 5) verify uploads to the PhenoCam server
 > 
-> ALWAYS configure the camera password to a non-default secure password over a secure network. BlueGreen Labs (BV) is not liable for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks due to lack of due diligence on part of the user.
+> **ALWAYS** configure the camera password to a non-default secure password over a secure network, ideally a router with no outside connection and limited devices. BlueGreen Labs (BV) is **not liable** for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks due to lack of due diligence on part of the user.
 
 ## Installation
 
 ### Hardware prerequisites
 
-Please connect a computer and the PhenoCam to the same (wireless) router which has **NO** internet access (see warnings regarding the default password above - make sure to set a strong password before the camera is exposed to an unprotected network). Once your camera is powered on and connected to the network you will need to find your camera’s network IP address. Make sure that the computer you are using was able to connect to the network and got an IP via DHCP.
+Please connect a computer and the PhenoCam to the same (wireless) router which has **NO** internet access (see warnings regarding the default password above - make sure to set a strong password before the camera is exposed to an unprotected network). Once your camera is powered on and connected to the (open) network you will need to find your camera’s network IP address.
 
 The easiest way to find the camera’s IP address is to install [StarDot Tools](http://www.stardot.com/downloads). Run the StarDot Tools program and click “refresh”. The camera should be detected and the camera’s IP address shown (you may have to run Tools as administrator in Windows, depending on your settings).
 
@@ -28,7 +29,7 @@ ping -c 3 -b 192.168.1.255
 arp -a
 ```
 
-to get a list of the MAC addresses and IP’s of all the computers on the local network. The StarDot cameras have a MAC address that starts with 00:30 so you may be able to find the camera that way. Again, you may need help from the local network administrator for this step.
+to get a list of the MAC addresses and IP’s of all the computers on the local network. The StarDot cameras have a MAC address that starts with `00:30` so you may be able to find the camera that way. Again, you may need help from the local network administrator for this step.
 
 ### Software prerequisites
 
@@ -43,19 +44,19 @@ git clone https://github.com/bluegreen-labs/phenocam_installation_tool_v2.git
 In the (unzipped) project directory you can then execute the below commands. The installation tool uses the following syntax
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password
+./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 30 -p password
 ```
 
 to enable sFTP support (key based login and encrypted transfers) use:
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 13 -p password -k TRUE
+./PIT.sh -i 192.168.1.xxx -n testcam -o +1 -s 9 -e 22 -m 30 -p password -k
 ```
 
 To retrieve the current login key use:
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -r TRUE
+./PIT.sh -i 192.168.1.xxx -r
 ```
 
 > [!note]
@@ -65,8 +66,10 @@ To retrieve the current login key use:
 To purge all settings and scripts use:
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -x TRUE
+./PIT.sh -i 192.168.1.xxx -x
 ```
+
+This will remove the previous installation, including the login key. In short, when you purge your camera you will have to upload a new (public) login key to phenocam@nau.edu for your specific camera.
 
 Where all parameters are listed as:
 

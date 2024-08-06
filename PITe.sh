@@ -14,26 +14,72 @@
 #
 #--------------------------------------------------------------------
 
-# error handling subroutines
+#---- global login banner ----
+
+echo ""
+echo "===================================================================="
+echo ""
+echo " Running the installation script on the NetCam Live2 camera!"
+echo ""
+echo " (c) BlueGreen Labs (BV) 2024 - https://bluegreenlabs.org"
+echo ""
+echo " -----------------------------------------------------------"
+echo ""
+
+#---- subroutines ----
+
+# error handling installation subroutines
 error_exit(){
   echo ""
   echo " NOTE: If no confirmation of a successful upload is provided,"
-  echo " check all script parameters."
+  echo " or a warning shows, check all script parameters and read the"
+  echo " warning statements."
   echo ""
   echo "===================================================================="
   exit 0
 }
 
-# error handling subroutines
-error_continued(){
+# error handling key retrieval routine
+error_key(){
   echo ""
-  echo " No private key 'phenocam_key' found... (please run the installation routine)"
+  echo " WARNING: No login key (pair) 'phenocam_key' found... "
+  echo " (please run the installation routine)"
   echo ""
+  echo "===================================================================="
+  exit 0
+}
+
+# error handling purging routine
+error_purge(){
+  echo ""
+  echo " WARNING: Purging of system settings failed, please try again!"
+  echo ""
+  echo "===================================================================="
+  exit 0
+}
+
+# error handling test routine
+error_upload(){
+  echo ""
+  echo " WARNING: Image upload failed, check your network connection"
+  echo " and settings!"
+  echo ""
+  echo "===================================================================="
+  exit 0
 }
 
 # define usage
 usage() { 
  echo "
+ 
+ This scripts covers the installation of your
+ Stardot NetCam Live2 PhenoCam
+ please use the following arguments.
+ 
+ Arguments which require an additional parameter
+ have descriptions enclosed in <> brackets. Other
+ arguments are binary choices.
+ 
  Usage: $0
   [-i <camera ip address>]
   [-p <camera password>]
@@ -42,46 +88,76 @@ usage() {
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
   [-m <interval minutes>]
-  [-k <set private key>]
-  [-r <retrieve private key>]
-  [-x <purge all previous settings and keys>]
-  " 1>&2; exit 0;
+  [-k key based (sFTP) authentication if specified]
+  [-u uploads images if specified, requires -i to be specified]
+  [-r retrieves login key if specified, requires -i to be specified]
+  [-x purges all previous settings and keys if specified, requires -i to be specified]
+  [-h calls this menu if specified]
+  " 1>&2
+  
+  exit 0
  }
 
-# grab arguments
-while getopts ":hi:p:n:o:t:s:e:m:k:r:x:d:" option;
-do
-    case "${option}"
-        in
-        i) ip=${OPTARG} ;;
-        p) pass=${OPTARG} ;;
-        n) name=${OPTARG} ;;
-        o) offset=${OPTARG} ;;
-        s) start=${OPTARG} ;;
-        e) end=${OPTARG} ;;
-        m) int=${OPTARG} ;;
-        k) key=${OPTARG} ;;
-        r) retrieve=${OPTARG} ;;
-        x) purge=${OPTARG} ;;
-        h | *) usage; exit 0 ;;
-    esac
-done
+upload() {
+ echo " Tries to upload image to the server"
+ echo ""
+# sh /mnt/cfg1/scripts/phenocam_upload.sh
+ 
+ # create command
+ command="
+  sh /mnt/cfg1/scripts/check_firmware.sh
+ "
+ 
+ # execute command
+ ssh admin@${ip} ${command} || error_upload 2>/dev/null
+ 
+ echo " -----------------------------------------------------------"
+ echo ""
+ echo " Done, successfully uploaded images"
+ echo ""
+ echo "===================================================================="
+ exit 0
+ }
 
-echo ""
-echo "===================================================================="
-echo ""
-echo " Running the installation script on the NetCam Live2 camera!"
-echo ""
-echo " (c) BlueGreen Labs (BV) 2024 - https://bluegreenlabs.org"
-echo " -----------------------------------------------------------"
-echo ""
+# if the retrieve the public key
+retrieve() {
+ 
+ # create command
+ command="
+  if [ -f '/mnt/cfg1/phenocam_key' ]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key -y; else exit 1; fi
+ "
+
+ echo " Retrieving the public key login credentials"
+ echo ""
+ 
+ # execute command
+ ssh admin@${ip} ${command} > tmp.pub || error_key 2>/dev/null
+ 
+ # strip out the public key
+ # no header or footer
+ grep "ssh-rsa" tmp.pub > phenocam_key.pub
+ rm -rf tmp.pub
+ 
+ echo "" 
+ echo " The public key was written to the 'phenocam_key.pub' file"
+ echo " in your current working directory!"
+ echo ""
+ echo " Forward this file to phenocam@nau.edu to finalize your"
+ echo " sFTP installation."
+ echo ""
+ echo "===================================================================="
+ exit 0
+}
 
 # if the retrieve argument is active retrieve the
-# public private keys
-if [ "${purge}" ]; then
+# public private keys, check if there are more than
+# two arguments given to avoid accidental purging
+purge() {
 
  echo " Purging all previous settings and login credentials"
  echo ""
+ 
+ # ASK FOR CONFIRMATION!!!
  
  # create command
  command="
@@ -93,44 +169,38 @@ if [ "${purge}" ]; then
  "
  
  # execute command
- ssh admin@${ip} ${command} || error_handler 2>/dev/null
+ ssh admin@${ip} ${command} || error_purge 2>/dev/null
  
  echo ""
- echo " Done, cleaned the camera!"
-  echo ""
- echo "===================================================================="
- exit 0
-fi
-
-# if the retrieve the public key
-if [ "${retrieve}" ]; then
- 
- # create command
- command="
-  if [ -f '/mnt/cfg1/phenocam_key' ]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key -y; else exit 1; fi
- "
-
- echo " Retrieving the public key login credentials"
- echo ""
- 
- # execute command
- ssh admin@${ip} ${command} > tmp.pub || error_continued 2>/dev/null
- 
- # strip out the public key
- # no header or footer
- grep "ssh-rsa" tmp.pub > phenocam_key.pub
- rm -rf tmp.pub
- 
- echo "" 
- echo " The public key was written to the 'phenocam_key.pub' file"
- echo " in the current working directory!"
- echo ""
- echo " Forward this file to phenocam@nau.edu to finalize your"
- echo " sFTP installation."
+ echo " Done, cleaned the camera settings!"
  echo ""
  echo "===================================================================="
  exit 0
-fi
+}
+
+#---- parse arguments (using subroutine calls) ----
+
+# grab arguments
+while getopts ":hi:p:n:o:s:e:m:kurx" option;
+do
+    case "${option}"
+        in
+        i) ip=${OPTARG} ;;
+        p) pass=${OPTARG} ;;
+        n) name=${OPTARG} ;;
+        o) offset=${OPTARG} ;;
+        s) start=${OPTARG} ;;
+        e) end=${OPTARG} ;;
+        m) int=${OPTARG} ;;
+        k) key="TRUE" ;;
+        u) upload;;
+        r) retrieve;;
+        x) purge="TRUE" ;;
+        h | *) usage; exit 0 ;;
+    esac
+done
+
+#---- installation routine ----
 
 # Default to GMT time zone
 tz="GMT"
@@ -138,19 +208,10 @@ tz="GMT"
 if [ "${key}" ]; then
  # print the content of the path to the
  # key and assign to a variable
- echo " Using secure SFTP!"
- echo ""
  has_key="TRUE"
 else
- echo " No key will be generated, defaulting to insecure FTP!"
- echo ""
  has_key="FALSE"
 fi
-
-# message on confirming the password
-echo " Uploading installation files, please approve this"
-echo " by confirming the password!"
-echo ""
 
 # colour settings
 red="220"
@@ -181,11 +242,12 @@ command="
  echo ${saturation} >> /mnt/cfg1/settings.txt &&
  echo ${backlight} >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
- if [[ ${has_key} = 'TRUE' && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
+ if [[ ${has_key} && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
  rm -rf /var/tmp/files &&
+ sh /mnt/cfg1/scripts/check_firmware.sh &&
  echo '#!/bin/sh' > /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
@@ -201,7 +263,6 @@ command="
  echo ' Upload start: ${start}' &&
  echo ' Upload end: ${end}' &&
  echo ' Upload interval: ${int}' &&
- echo ' Upload interval: ${int}' &&
  echo '' &&
  echo ' And the following colour settings:' &&
  echo ' ----------------------------------' &&
@@ -216,19 +277,30 @@ command="
  echo ' Saturation: ${saturation}' &&
  echo ' Backlight: ${backlight}' &&
  echo '' &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' A private key exists or was generated, please run:'; fi &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ./PIT.sh ${ip} -r TRUE'; fi &&
+ if [ -f /mnt/cfg1/phenocam_key ]; then echo ' A key (pair) exists or was generated, please run:'; fi &&
+ if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ./PIT.sh ${ip} -r'; fi &&
+ if [ -f /mnt/cfg1/phenocam_key ]; then echo ' to display/retrieve the current login key'; fi &&
  echo '' &&
- echo ' --> Reboot the camera by cycling the power or wait 20 seconds! <-- ' &&
+ echo ' ----------------------------------' &&
+ echo '' &&
+ echo ' !! Reboot the camera by cycling the power, or wait 20 seconds !!' &&
+ echo '' &&
+ echo ' [NOTE: the full install reboot cycle takes up to 10 min (!!)' && 
+ echo ' please wait before logging in or triggering a the script again]' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&
  sh /mnt/cfg1/scripts/reboot_camera.sh
 "
 
+echo " Please confirm your password to complete the installation upon reboot."
+echo ""
+
 # install command
 BINLINE=$(awk '/^__BINARY__/ { print NR + 1; exit 0; }' $0)
 tail -n +${BINLINE} $0 | ssh admin@${ip} ${command} || error_exit 2>/dev/null
+
+#---- purge password from history ----
 
 # remove last lines from history
 # containing the password

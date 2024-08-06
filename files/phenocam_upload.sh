@@ -30,7 +30,8 @@ capture () {
  # grab the exposure time and append to meta-data
  exposure=`/usr/sbin/get_exp | cut -d ' ' -f4`
 
- #cat metadata.txt >> /var/tmp/${metafile}
+ # adjust meta-data file
+ cat /var/tmp/metadata.txt > /var/tmp/${metafile}
  echo "exposure=${exposure}" >> /var/tmp/${metafile}
  echo "ir_enable=$ir" >> /var/tmp/${metafile}
  echo "datetime_original=\"$METADATETIME\"" >> /var/tmp/${metafile}
@@ -84,7 +85,7 @@ DATETIMESTRING=`date +"%Y_%m_%d_%H%M%S"`
 
 # grab metadata using the metadata function
 # grab the MAC address
-mac_addr=`ifconfig eth0 | grep HWaddr | awk '{print $5}' | sed 's/://g'`
+mac_addr=`ifconfig eth0 | grep 'HWaddr' | awk '{print $5}' | sed 's/://g'`
 
 # grab internal ip address
 ip_addr=`ifconfig eth0 | awk '/inet addr/{print substr($2,6)}'`
@@ -115,7 +116,7 @@ fi
 overlay_text=`echo "${SITENAME} - ${model} - ${DATE} - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
-wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} 2>/dev/null
 
 # clean up detritus
 rm vb*
@@ -194,7 +195,8 @@ do
    echo "PUT ${metafile} data/${SITENAME}/${metafile}" >> batchfile
   
    # upload the data
-   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER}
+   echo "uploading image ${image} (state: ${state})"
+   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} 2>/dev/null
    
    # remove batch file
    rm batchfile
@@ -204,10 +206,10 @@ do
   
    # upload image
    echo "uploading image ${image} (state: ${state})"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image}
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} 2>/dev/null
 	
    echo "uploading meta-data ${metafile} (state: ${state})"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile}
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} 2>/dev/null
 
   fi
  done
@@ -233,7 +235,7 @@ done
 overlay_text=`echo "${SITENAME} - ${model} - %a %b %d %Y %H:%M:%S - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
-wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text}
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} 2>/dev/null
 
 # clean up detritus
 rm vb*
