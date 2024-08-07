@@ -3,14 +3,12 @@
 PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam network. This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
 
 > [!warning]
-> The default password on the Stardot cameras is **INSECURE**. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min).
-> 
-> Instructions on how to change the default password securely are provided in the instructions below. Follow these instructions step by step to ensure a secure install.
+> The default password on the Stardot cameras is **INSECURE**. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min). Instructions on how to change the default password securely are provided in the instructions below. Follow these instructions step by step to ensure a secure install.
 
 ## Installation
 
-> Please read these instructions **carefully**, failing to do so might result in a poorly configured camera.
-> Follow these instructions step-by-step for a successful PhenoCam install.
+> [!note]
+> Please read these instructions **carefully**, failing to do so might result in a poorly configured camera. Follow these instructions step-by-step for a successful PhenoCam install.
 
 Every PhenoCam needs to be added to the network (database) and approved using the site survey at the following link:
 
@@ -111,7 +109,7 @@ Once successfully configured make sure the router or camera has internet access.
 ./PIT.sh -i 192.168.1.xxx -u
 ```
 
-Wait until the camera uploads its first images, the process will be verbose and give sufficient feedback on progress. If not explicit warnings are provided you should assume the upload was successful. Once uploaded, verify the webpage associated with your camera at:
+Wait until the camera uploads its first images, the process will be verbose and give sufficient feedback on progress. If no explicit warnings are provided you should assume the upload was successful. Once uploaded, verify the webpage associated with your camera at:
 
 ```
 https://phenocam.nau.edu/webcam/sites/YOURCAMERANAME/
