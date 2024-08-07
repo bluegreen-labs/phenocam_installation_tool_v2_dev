@@ -42,7 +42,7 @@ fi
 if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then 
 
 	# start logging
-	echo "----- ${today} -----" > /var/tmp/log.txt
+	echo "----- ${today} -----" >> /var/tmp/log.txt
 
 	#----- read in settings
 	if [ -f '/mnt/cfg1/settings.txt' ]; then

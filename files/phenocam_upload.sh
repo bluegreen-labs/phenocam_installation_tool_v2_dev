@@ -8,7 +8,13 @@
 #
 #--------------------------------------------------------------------
 
-capture () {
+# hard code path which are lost in some instances
+# when calling the script through ssh 
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
+#---- subroutines ---
+
+capture() {
 
  image=$1
  metafile=$2
@@ -22,7 +28,7 @@ capture () {
  sleep $delay
 
  # grab the image from the
- wget http://127.0.0.1/image.jpg -O ${image}
+ wget http://127.0.0.1/image.jpg -O ${image} >/dev/null 2>/dev/null
 
  # grab date and time for `.meta` files
  METADATETIME=`date -Iseconds`
@@ -116,7 +122,7 @@ fi
 overlay_text=`echo "${SITENAME} - ${model} - ${DATE} - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
-wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} 2>/dev/null
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} >/dev/null 2>/dev/null
 
 # clean up detritus
 rm vb*
@@ -196,7 +202,7 @@ do
   
    # upload the data
    echo "uploading image ${image} (state: ${state})"
-   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} 2>/dev/null
+   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
    
    # remove batch file
    rm batchfile
@@ -206,10 +212,10 @@ do
   
    # upload image
    echo "uploading image ${image} (state: ${state})"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} 2>/dev/null
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} >/dev/null 2>/dev/null
 	
    echo "uploading meta-data ${metafile} (state: ${state})"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} 2>/dev/null
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} >/dev/null 2>/dev/null
 
   fi
  done
@@ -235,7 +241,7 @@ done
 overlay_text=`echo "${SITENAME} - ${model} - %a %b %d %Y %H:%M:%S - GMT${time_offset}" | sed 's/ /%20/g'`
 	
 # for now disable the overlay
-wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} 2>/dev/null
+wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} >/dev/null 2>/dev/null
 
 # clean up detritus
 rm vb*
@@ -244,6 +250,7 @@ rm vb*
 echo "last upload at:" >> /var/tmp/log.txt
 echo $DATE >> /var/tmp/log.txt
 
-#------- FILE PERMISSIONS -------------------------------------------
+#------- FILE PERMISSIONS AND CLEANUP -------------------------------
+rm -f /var/tmp/metadata.txt
 chmod a+rw /var/tmp/*
 

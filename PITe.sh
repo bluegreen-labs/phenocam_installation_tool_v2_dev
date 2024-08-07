@@ -19,7 +19,7 @@
 echo ""
 echo "===================================================================="
 echo ""
-echo " Running the installation script on the NetCam Live2 camera!"
+echo " Phenocam Installation Tool (PIT) V2 for NetCam Live2 cameras"
 echo ""
 echo " (c) BlueGreen Labs (BV) 2024 - https://bluegreenlabs.org"
 echo ""
@@ -101,11 +101,16 @@ usage() {
 upload() {
  echo " Tries to upload image to the server"
  echo ""
-# sh /mnt/cfg1/scripts/phenocam_upload.sh
+ 
+  # check if IP is provided
+ if [ -z ${ip} ]; then
+  echo " No IP address provided"
+  error_upload
+ fi
  
  # create command
  command="
-  sh /mnt/cfg1/scripts/check_firmware.sh
+  sh /mnt/cfg1/scripts/phenocam_upload.sh
  "
  
  # execute command
@@ -121,6 +126,12 @@ upload() {
 
 # if the retrieve the public key
 retrieve() {
+ 
+ # check if IP is provided
+ if [ -z ${ip} ]; then
+  echo " No IP address provided"
+  error_key
+ fi
  
  # create command
  command="
@@ -157,7 +168,26 @@ purge() {
  echo " Purging all previous settings and login credentials"
  echo ""
  
+  # check if IP is provided
+ if [ -z ${ip} ]; then
+  echo " No IP address provided"
+  error_purge
+ fi
+ 
  # ASK FOR CONFIRMATION!!!
+ read -p "Do you wish to perform this action?" yesno
+ case $yesno in
+        [Yy]* ) 
+            echo "Purging the system settings..."
+        ;;
+        [Nn]* ) 
+            echo "You answered no, exiting"
+            exit_purge
+        ;;
+        * ) echo "Answer either yes or no!"
+            exit_purge
+        ;;
+ esac 
  
  # create command
  command="
@@ -178,7 +208,7 @@ purge() {
  exit 0
 }
 
-#---- parse arguments (using subroutine calls) ----
+#---- parse arguments (and/or execute subroutine calls) ----
 
 # grab arguments
 while getopts ":hi:p:n:o:s:e:m:kurx" option;
@@ -293,7 +323,8 @@ command="
  sh /mnt/cfg1/scripts/reboot_camera.sh
 "
 
-echo " Please confirm your password to complete the installation upon reboot."
+echo " Please confirm your password to login and execute the login script."
+echo " "
 echo ""
 
 # install command
