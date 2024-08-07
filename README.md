@@ -1,2 +1,3 @@
 > [!note]
-> 
+> Due to the Internet-of-Things (IoT) nature of the code of the Phenocam Installation Tool BlueGreen Labs (BV), as a small software developer, is forced to open this code to avoid costly litigation under the European Commission Digital Services Act (DSA). This code is therefore "open source" under a [CC-BY-NC-ND 4.0 license](https://creativecommons.org/licenses/by-nc-nd/4.0/). 
+> This means that you are free to read the content to ensure no malicious actions are taken on your network, to be in compliance with the DSA. This license is however as restrictive as possible, due to the considerable uncompensated time invested. In short, no other practical use cases are permitted without consent. Please consult BlueGreen Labs (BV) for custom applications. Failure to comply will result in very very swift legal action.
