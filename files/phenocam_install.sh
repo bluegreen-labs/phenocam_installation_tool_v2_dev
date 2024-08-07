@@ -30,7 +30,7 @@ host='phenocam.nau.edu'
 # create default server
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
   echo ${host} > /mnt/cfg1/server.txt
-  echo "using default host: ${host}" >> /var/tmp/log.txt
+  echo "using default host: ${host}" >> /var/tmp/install_log.txt
   chmod a+rw /mnt/cfg1/server.txt
 fi
 
@@ -42,7 +42,7 @@ fi
 if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then 
 
 	# start logging
-	echo "----- ${today} -----" >> /var/tmp/log.txt
+	echo "----- ${today} -----" >> /var/tmp/install_log.txt
 
 	#----- read in settings
 	if [ -f '/mnt/cfg1/settings.txt' ]; then
@@ -65,7 +65,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 saturation=`awk 'NR==14' /mnt/cfg1/settings.txt`
 	 blc=`awk 'NR==15' /mnt/cfg1/settings.txt`
 	else
-	 echo "Settings file missing, aborting install routine!" >> /var/tmp/log.txt
+	 echo "Settings file missing, aborting install routine!" >> /var/tmp/install_log.txt
 	fi
 	
         pass=`awk 'NR==1' /mnt/cfg1/.password`
@@ -88,7 +88,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	# clean up detritus
 	rm vb*
 	
-	echo "time set to (ascii format): ${TZ}" >> /var/tmp/log.txt
+	echo "time set to (ascii format): ${TZ}" >> /var/tmp/install_log.txt
 	
 	#----- set overlay
 	
@@ -108,7 +108,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	# clean up detritus
 	rm vb*
 	
-	echo "header set to: ${overlay_text}" >> /var/tmp/log.txt
+	echo "header set to: ${overlay_text}" >> /var/tmp/install_log.txt
 	
 	#----- set colour settings
 	
@@ -148,7 +148,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 fi
 	done
 
-	echo "crontab intervals set to: ${interval}" >> /var/tmp/log.txt
+	echo "crontab intervals set to: ${interval}" >> /var/tmp/install_log.txt
 
 	#----- set root cron jobs
 	
@@ -162,7 +162,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	echo "59 23 * * * sh /mnt/cfg1/scripts/reboot_camera.sh" > /mnt/cfg1/schedule/root
 	
 	# info
-	echo "Finished initial setup" >> /var/tmp/log.txt
+	echo "Finished initial setup" >> /var/tmp/install_log.txt
 
 	#----- finalize the setup + reboot
 

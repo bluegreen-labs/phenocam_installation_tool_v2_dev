@@ -32,8 +32,7 @@ echo ""
 error_exit(){
   echo ""
   echo " NOTE: If no confirmation of a successful upload is provided,"
-  echo " or a warning shows, check all script parameters and read the"
-  echo " warning statements."
+  echo " or warnings are shown, check all script parameters."
   echo ""
   echo "===================================================================="
   exit 0
@@ -99,7 +98,7 @@ usage() {
  }
 
 upload() {
- echo " Tries to upload image to the server"
+ echo " Try to upload image to the server"
  echo ""
  
   # check if IP is provided
@@ -184,7 +183,7 @@ purge() {
             echo "You answered no, exiting"
             exit_purge
         ;;
-        * ) echo "Answer either yes or no!"
+        * ) 
             exit_purge
         ;;
  esac 
@@ -211,7 +210,7 @@ purge() {
 #---- parse arguments (and/or execute subroutine calls) ----
 
 # grab arguments
-while getopts ":hi:p:n:o:s:e:m:kurx" option;
+while getopts "hi:p:n:o:s:e:m:kurx" option;
 do
     case "${option}"
         in
@@ -222,26 +221,66 @@ do
         s) start=${OPTARG} ;;
         e) end=${OPTARG} ;;
         m) int=${OPTARG} ;;
-        k) key="TRUE" ;;
-        u) upload;;
-        r) retrieve;;
-        x) purge="TRUE" ;;
+        k) key=TRUE ;;
+        u) upload ;;
+        r) retrieve ;;
+        x) purge ;;
         h | *) usage; exit 0 ;;
     esac
 done
 
 #---- installation routine ----
 
-# Default to GMT time zone
-tz="GMT"
+# validating parameters
+if [[ -z ${ip} || ${ip} == -* ]]; then
+ echo " WARNING: No IP address provided"
+ error_exit
+fi
+
+if [[ -z ${pass} || ${pass} == -* ]]; then
+ echo " WARNING: No password provided"
+ error_exit
+fi
+
+if [[ -z ${name} || ${name} == -* ]]; then
+ echo " WARNING: No camera name provided"
+ error_exit
+fi
+
+if [[ -z ${offset} || ${offset} == -* ]]; then
+ echo " WARNING: No GMT time offset provided"
+ error_exit
+fi
+
+if [[ -z ${start} || ${start} == -* ]]; then
+ echo " NOTE: No start time (24h format) provided, using the default (9h)"
+ start='9'
+fi
+
+if [[ -z ${end} || ${end} == -* ]]; then
+ echo " NOTE: No end time (24h format) provided, using the default (22h)"
+ end='22'
+fi
+
+if [[ -z ${int} || ${int} == -* ]]; then
+ echo " NOTE: No interval (in minutes) provided, using the default (30 min)"
+ int='30'
+fi
 
 if [ "${key}" ]; then
- # print the content of the path to the
- # key and assign to a variable
- has_key="TRUE"
-else
- has_key="FALSE"
+  # print the content of the path to the
+  # key and assign to a variable
+  echo " NOTE: Using secure SFTP and key based logins!"
+  echo ""
+  has_key="TRUE"
+ else
+  echo " NOTE: No key will be generated, defaulting to insecure FTP!"
+  echo ""
+  has_key="FALSE"
 fi
+
+# Default to GMT time zone
+tz="GMT"
 
 # colour settings
 red="220"
@@ -288,44 +327,42 @@ command="
  echo ' The following options have been set:' &&
  echo ' ------------------------------------' &&
  echo '' &&
- echo ' Sitename: ${name}' &&
- echo ' GMT timezone offset: ${offset}' &&
- echo ' Upload start: ${start}' &&
- echo ' Upload end: ${end}' &&
- echo ' Upload interval: ${int}' &&
+ echo ' Sitename: ${name} | Timezone: GMT${offset}' &&
+ echo ' Upload start - end: ${start} - ${end} (h)' &&
+ echo ' Upload interval: every ${int} (min)' &&
  echo '' &&
  echo ' And the following colour settings:' &&
  echo ' ----------------------------------' &&
  echo '' &&
- echo ' Red Gain: ${red}' &&
- echo ' Green Gain: ${green}' &&
- echo ' Blue Gain: ${blue}' &&
- echo ' Brightness: ${brightness}' &&
- echo ' Sharpness: ${sharpness}'&&
- echo ' Hue: ${hue}' &&
- echo ' Contrast: ${contrast}' &&
- echo ' Saturation: ${saturation}' &&
- echo ' Backlight: ${backlight}' &&
+ echo ' Gain values (R G B): ${red} ${green} ${blue}' &&
+ echo ' Brightness: ${brightness} | Sharpness: ${sharpness}' &&
+ echo ' Hue: ${hue} | Contrast: ${contrast}' &&
+ echo ' Saturation: ${saturation} | Backlight: ${backlight}' &&
+ echo '' &&
+ if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ----------------------------------'; fi &&
  echo '' &&
  if [ -f /mnt/cfg1/phenocam_key ]; then echo ' A key (pair) exists or was generated, please run:'; fi &&
  if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ./PIT.sh ${ip} -r'; fi &&
  if [ -f /mnt/cfg1/phenocam_key ]; then echo ' to display/retrieve the current login key'; fi &&
  echo '' &&
- echo ' ----------------------------------' &&
+ echo '====================================================================' &&
  echo '' &&
- echo ' !! Reboot the camera by cycling the power, or wait 20 seconds !!' &&
+ echo ' --> SUCCESSFUL UPLOAD OF THE INSTALLATION SCRIPT   <-- ' &&
+ echo ' --> THE CAMERA WILL REBOOT TO COMPLETE THE INSTALL <--' &&
  echo '' &&
- echo ' [NOTE: the full install reboot cycle takes up to 10 min (!!)' && 
- echo ' please wait before logging in or triggering a the script again]' &&
+ echo ' [NOTE: the full install will take several reboot cycles (~5 min !!),' && 
+ echo ' please wait before logging in or triggering the script again. The' &&
+ echo ' current SSH connection will be closed for reboot in 20 sec.]' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&
  sh /mnt/cfg1/scripts/reboot_camera.sh
 "
 
-echo " Please confirm your password to login and execute the login script."
-echo " "
 echo ""
+echo " Please login to execute the installation script."
+echo ""
+
 
 # install command
 BINLINE=$(awk '/^__BINARY__/ { print NR + 1; exit 0; }' $0)

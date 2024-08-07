@@ -12,6 +12,12 @@
 # when calling the script through ssh 
 PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
+#---- feedback on startup ---
+
+echo ""
+echo "Starting image uploads ... "
+echo ""
+
 #---- subroutines ---
 
 capture() {
@@ -22,7 +28,7 @@ capture() {
  ir=$4
 
  # Set the image to non IR i.e. VIS
- /usr/sbin/set_ir.sh $ir
+ /usr/sbin/set_ir.sh $ir >/dev/null 2>/dev/null
 
  # adjust exposure
  sleep $delay
@@ -195,26 +201,29 @@ do
  
   # if key file exists use SFTP
   if [ -f "/mnt/cfg1/phenocam_key" ]; then
-   echo "using SFTP"
+   echo "using sFTP"
   
    echo "PUT ${image} data/${SITENAME}/${image}" > batchfile
    echo "PUT ${metafile} data/${SITENAME}/${metafile}" >> batchfile
   
    # upload the data
-   echo "uploading image ${image} (state: ${state})"
+   echo "Uploading (state: ${state})"
+   echo " - image file: ${image}"
+   echo " - meta-data file: ${metafile}"
    sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
    
    # remove batch file
    rm batchfile
    
   else
-   echo "defaulting to FTP, check your key"
+   echo "Using FTP [check your install to use sFTP]"
   
    # upload image
-   echo "uploading image ${image} (state: ${state})"
+   echo "Uploading (state: ${state})"
+   echo " - image file: ${image}"
    ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} >/dev/null 2>/dev/null
 	
-   echo "uploading meta-data ${metafile} (state: ${state})"
+   echo " - meta-data file: ${metafile}"
    ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} >/dev/null 2>/dev/null
 
   fi
@@ -247,10 +256,15 @@ wget http://admin:${pass}@127.0.0.1/vb.htm?overlaytext1=${overlay_text} >/dev/nu
 rm vb*
 
 #------- FEEDBACK ON ACTIVITY ---------------------------------------
-echo "last upload at:" >> /var/tmp/log.txt
-echo $DATE >> /var/tmp/log.txt
+if [ ! -f "/var/tmp/image_log.txt" ]; then
+ touch /var/tmp/image_log.txt
+ chmod a+rw /var/tmp/image_log.txt
+fi
+
+echo "last uploads at:" >> /var/tmp/image_log.txt
+echo $DATE >> /var/tmp/image_log.txt
+tail /var/tmp/image_log.txt
 
 #------- FILE PERMISSIONS AND CLEANUP -------------------------------
 rm -f /var/tmp/metadata.txt
-chmod a+rw /var/tmp/*
 
