@@ -47,7 +47,7 @@ In the (unzipped) project directory you can then execute the below steps, to set
 
 ### 3. **Change the default password**
 
-> [!stop]
+> [!warning]
 > **ALWAYS** configure the camera password to a non-default secure password over a secure network, ideally a router with no outside connection and limited devices. BlueGreen Labs (BV) is **not liable** for the abuse of misconfigured cameras as a vector for network breaches and cyber-attacks due to lack of due diligence on part of the user.
 
 Use the included script using the following code to update your password:
