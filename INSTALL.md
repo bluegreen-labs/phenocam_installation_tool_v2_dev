@@ -58,17 +58,17 @@ using the IP address you retrieved using the above instructions. **Follow the on
 
 ### 4. The PIT configuration script
 
-To install your phenocam you will use the Phenocam Installation Tool (or PIT) script. The `PIT.sh` script allows you to set the correct parameters, retrieve login keys (for sFTP based transfers), trigger a manual image upload and remove all configuration files (purge the camera). All parameters are listed below, with those which take arguments noted between <> brackets.
+To install your phenocam you will use the Phenocam Installation Tool (or PIT) script. The `PIT.sh` script allows you to set the correct parameters, retrieve login keys (for sFTP based transfers), trigger a manual image upload and remove all configuration files (purge the camera). All parameters are listed below, with those which take arguments noted in a **bold** font.
 
 | Parameter     | Description |
 | ------------- | ------------------------------ |
-| -i            | <ip address of the camera> |
-| -p            | <camera password> |
-| -n            | <the name of the camera or site> |
-| -o            | <difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC)> |
-| -s            | <first hour of the scheduled image acquisitions (e.g. 4 in the morning)> |
-| -e            | <last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation)> |
-| -m            | <interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30)> |
+| -i            | **ip address of the camera** |
+| -p            | **camera password** |
+| -n            | **the name of the camera or site** |
+| -o            | **difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC)** |
+| -s            | **first hour of the scheduled image acquisitions (e.g. 4 in the morning)** |
+| -e            | **last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation)** |
+| -m            | **interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30)** |
 | -k            | set sFTP key, TRUE if specified |
 | -r            | retrieve previously installed login keys from the camera |
 | -x            | purge all settings and scripts from the camera (soft reset) |
