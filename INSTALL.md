@@ -64,7 +64,7 @@ To install your phenocam you will use the Phenocam Installation Tool (or PIT) sc
 | ------------- | ------------------------------ |
 | -i            | <ip address of the camera> |
 | -p            | <camera password> |
-| -n            | <the name of the camera / site> |
+| -n            | <the name of the camera or site> |
 | -o            | <difference in hours from UTC of the timezone in which the camera resides (always use + or - signs to denote differences from UTC)> |
 | -s            | <first hour of the scheduled image acquisitions (e.g. 4 in the morning)> |
 | -e            | <last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation)> |
