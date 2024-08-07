@@ -14,10 +14,12 @@ chmod +x PIT.sh
 if [ -d "../phenocam_installation_tool_v2/" ];
 then
  cp INSTALL.md ../phenocam_installation_tool_v2/README.md
+ cp PITpass.sh ../phenocam_installation_tool_v2/
  mv PIT.sh ../phenocam_installation_tool_v2/
 
  cd ../phenocam_installation_tool_v2/
  git add PIT.sh
+ git add PITpass.sh
  git commit -am "update PIT"
  git push
 fi
