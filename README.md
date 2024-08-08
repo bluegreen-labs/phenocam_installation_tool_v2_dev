@@ -1,3 +1,9 @@
+## PhenoCam Installation Tool (PIT) development repository
+
+This is the development repository of the [PhenoCam Installation Tool (v2)](). If you are looking to configure your PhenoCam **YOU SHOULD NOT** use this repository. This repository is here for code development and legal liability reasons only. If you want to configure your PhenoCam use the following repository:
+
+https://github.com/bluegreen-labs/phenocam_installation_tool_v2/
+
 > [!warning]
 > Due to the Internet-of-Things (IoT) nature of the code of the Phenocam Installation Tool (PIT) BlueGreen Labs (BV), as a small software developer, is forced to open this code to avoid costly litigation under the European Commission [Cyber Resilience Act (CRA)](https://en.wikipedia.org/wiki/Digital_Services_Act) should a user mess up and a device is used as a mallware vector. This code is therefore "open source" under a [CC-BY-NC-ND 4.0 license](https://creativecommons.org/licenses/by-nc-nd/4.0/), and uses a very narrow interpretation of open souce.
 >
