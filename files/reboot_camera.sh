@@ -28,4 +28,11 @@ wget http://admin:${pass}@127.0.0.1/vb.htm?ipcamrestartcmd &>/dev/null
 # don't exit cleanly when the reboot command doesn't stick
 # should trigger a warning message
 sleep 60
+
+echo " -----------------------------------------------------------"
+echo ""
+echo " REBOOT FAILED - INSTALL MIGHT NOT BE COMPLETE!"
+echo ""
+echo "===================================================================="
+
 exit 1
