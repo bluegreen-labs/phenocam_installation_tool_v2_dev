@@ -8,6 +8,10 @@
 #
 #--------------------------------------------------------------------
 
+# hard code path which are lost in some instances
+# when calling the script through ssh 
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
 # some feedback on the action
 echo "uploading IP table"
 

@@ -352,7 +352,7 @@ command="
  echo '' &&
  echo ' [NOTE: the full install will take several reboot cycles (~5 min !!),' && 
  echo ' please wait before logging in or triggering the script again. The' &&
- echo ' current SSH connection will be closed for reboot in 20 sec.]' &&
+ echo ' current SSH connection will be closed for reboot in 30 sec.]' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&

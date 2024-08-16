@@ -8,20 +8,24 @@
 #
 #--------------------------------------------------------------------
 
+# hard code path which are lost in some instances
+# when calling the script through ssh 
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
 # grab password
 pass=`awk 'NR==1' /mnt/cfg1/.password`
 
 # move into temporary directory
 cd /var/tmp
 
-# sleep 60 seconds for last
+# sleep 30 seconds for last
 # command to finish (if any should be running)
-sleep 60
+sleep 30
 
 # then reboot
 wget http://admin:${pass}@127.0.0.1/vb.htm?ipcamrestartcmd &>/dev/null
 
-# should this fail always fall back to a hard reboot
-sleep 10
-reboot
-
+# don't exit cleanly when the reboot command doesn't stick
+# should trigger a warning message
+sleep 60
+exit 1

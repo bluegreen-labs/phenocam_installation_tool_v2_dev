@@ -4,12 +4,13 @@
 # (c) Koen Hufkens for BlueGreen Labs (BV)
 #
 # Unauthorized changes to this script are considered a copyright
-# violation and will be prosecuted. If you came this far think
-# twice about what you are about to do. As this means that you
-# reverse engineered protection through obfuscation
-# which would constitute a first copyright offense.
+# violation and will be prosecuted.
 #
 #--------------------------------------------------------------------
+
+# hard code path which are lost in some instances
+# when calling the script through ssh 
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
 sleep 30
 cd /var/tmp

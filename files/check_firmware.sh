@@ -8,6 +8,10 @@
 #
 #--------------------------------------------------------------------
 
+# hard code path which are lost in some instances
+# when calling the script through ssh 
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
 # grab password
 pass=`awk 'NR==1' /mnt/cfg1/.password`
 
