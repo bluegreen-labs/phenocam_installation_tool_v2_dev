@@ -12,6 +12,13 @@
 # when calling the script through ssh 
 PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
+# error handling
+error_exit(){
+  echo ""
+  echo " FAILED TO UPLOAD DATA"
+  echo ""
+}
+
 #---- feedback on startup ---
 
 echo ""
@@ -210,7 +217,7 @@ do
    echo "Uploading (state: ${state})"
    echo " - image file: ${image}"
    echo " - meta-data file: ${metafile}"
-   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
+   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null || error_exit
    
    # remove batch file
    rm batchfile
@@ -221,10 +228,10 @@ do
    # upload image
    echo "Uploading (state: ${state})"
    echo " - image file: ${image}"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} >/dev/null 2>/dev/null
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${image} ${image} >/dev/null 2>/dev/null || error_exit
 	
    echo " - meta-data file: ${metafile}"
-   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} >/dev/null 2>/dev/null
+   ftpput ${SERVER} --username anonymous --password anonymous  data/${SITENAME}/${metafile} ${metafile} >/dev/null 2>/dev/null || error_exit
 
   fi
  done

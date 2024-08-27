@@ -311,7 +311,7 @@ command="
  echo ${saturation} >> /mnt/cfg1/settings.txt &&
  echo ${backlight} >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
- if [[ ${has_key} && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t rsa -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
+ if [[ ${has_key} && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t ecdsa -s 521 -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
