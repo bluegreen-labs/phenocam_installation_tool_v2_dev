@@ -89,6 +89,7 @@ usage() {
   [-m <interval minutes>]
   [-k key based (sFTP) authentication if specified]
   [-u uploads images if specified, requires -i to be specified]
+  [-v validate login credentials for sFTP transfers]
   [-r retrieves login key if specified, requires -i to be specified]
   [-x purges all previous settings and keys if specified, requires -i to be specified]
   [-h calls this menu if specified]
@@ -97,8 +98,31 @@ usage() {
   exit 0
  }
 
+validate() {
+ echo " Trying to validate sFTP login"
+ echo ""
+ 
+  # check if IP is provided
+ if [ -z ${ip} ]; then
+  echo " No IP address provided"
+  error_upload
+ fi
+ 
+ # create command
+ command="
+  sh /mnt/cfg1/scripts/phenocam_validate.sh
+ "
+ 
+ # execute command
+ ssh admin@${ip} ${command} 2>/dev/null
+
+ echo ""
+ echo "===================================================================="
+ exit 0
+ }
+
 upload() {
- echo " Try to upload image to the server"
+ echo " Trying to upload image to the server"
  echo ""
  
   # check if IP is provided
@@ -113,11 +137,8 @@ upload() {
  "
  
  # execute command
- ssh admin@${ip} ${command} || error_upload 2>/dev/null
+ ssh admin@${ip} ${command} || error_upload 2> /dev/null
  
- echo " -----------------------------------------------------------"
- echo ""
- echo " Done, successfully uploaded images"
  echo ""
  echo "===================================================================="
  exit 0
@@ -210,7 +231,7 @@ purge() {
 #---- parse arguments (and/or execute subroutine calls) ----
 
 # grab arguments
-while getopts "hi:p:n:o:s:e:m:kurx" option;
+while getopts "hi:p:n:o:s:e:m:kuvrx" option;
 do
     case "${option}"
         in
@@ -223,6 +244,7 @@ do
         m) int=${OPTARG} ;;
         k) key=TRUE ;;
         u) upload ;;
+        v) validate ;;
         r) retrieve ;;
         x) purge ;;
         h | *) usage; exit 0 ;;
