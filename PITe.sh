@@ -117,6 +117,8 @@ validate() {
  ssh admin@${ip} ${command} 2>/dev/null
 
  echo ""
+ echo "[if no warnings are given your logins were successful]"
+ echo ""
  echo "===================================================================="
  exit 0
  }
