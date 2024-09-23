@@ -98,15 +98,7 @@ Similarly, using a dash in your password would require the following structure:
 ./PIT.sh -i 192.168.1.xxx -p "my\-password" -n testcam -o "\-1" -s 9 -e 22 -m 30
 ```
 
-##### sFTP support
-
-To enable sFTP support (key based login and encrypted transfers) you would add the `-k` parameter:
-
-```bash
-./PIT.sh -i 192.168.1.xxx -p password -n testcam -o +1 -s 9 -e 22 -m 30 -k
-```
-
-To retrieve the current login key use when using sFTP use:
+To retrieve the current login key to use when using sFTP use:
 
 ```bash
 ./PIT.sh -i 192.168.1.xxx -r
@@ -120,6 +112,10 @@ To complete the sFTP install you will have to email this (public) key file to ph
 ```bash
 ./PIT.sh -i 192.168.1.xxx -v
 ```
+
+> [!note]
+> Internally there is a fallback routine which uploads images via insecure FTP if the key is not validated. 
+> Note that with time the service will migrate to sFTP only. Please validate your key upon initial install.
 
 #### 4.2 Uploading a test image manually
 
@@ -148,7 +144,10 @@ To purge all settings and scripts use:
 ./PIT.sh -i 192.168.1.xxx -x
 ```
 
-Only use this option as a last resort (or when recycling the camera for a new site). You can call the installation routine, to change your camera settings, multiple times without deleting your login credentials.
+Only use this option as a last resort (or when recycling the camera for a new site). 
+
+> [!note]
+> You can call the installation routine, to change your camera settings, **multiple times** without deleting your login credentials.
 
 ### Backups and offline use
 

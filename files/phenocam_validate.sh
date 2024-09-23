@@ -12,13 +12,6 @@
 # when calling the script through ssh 
 PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
-# error handling
-error_exit(){
-  echo ""
-  echo " sFTP login failed! Did you upload your public key?"
-  echo ""
-}
-
 # -------------- SETTINGS -------------------------------------------
 
 # Move into temporary directory
@@ -37,7 +30,6 @@ if [ ! -f "/mnt/cfg1/phenocam_key" ]; then
  exit 0
 fi
 
-
 # run the upload script for the ip data
 # and for all servers
 for i in $nrservers;
@@ -46,9 +38,23 @@ do
  
   echo "" 
   echo "Checking server: ${SERVER}"
+  echo ""
 
   echo "exit" > batchfile
-  sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null || error_exit
+  sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
+
+  # if status output last command was
+  # 0 set service to sFTP
+  if [ $? -eq 0 ]; then
+    echo "SUCCES... secure sFTP login worked"
+    echo ""
+    service="sFTP"
+  else
+    echo "FAILED... secure sFTP login did not work"
+    echo ""
+  fi
   
+  # cleanup
+  rm batchfile
 done
 
