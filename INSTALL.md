@@ -170,7 +170,13 @@ If a micro-SD card is inserted in the back of the camera all images will be back
  
  - do a factory reset by pressing the recessed button on the back of the camera with a small metal rod
  - a soft reset can be done by purging the camera (see above)
- 
-4. I want to run a custom setup, where do I find information?
+
+4. My camera is unresponsive, what should I do?
+
+ - do a factory reset by pressing the recessed button on the back of the camera with a small metal rod
+
+5. I want to run a custom setup, where do I find information?
 
  - the software only supports PhenoCam US and ICOS phenocams, for custom setups contanct BlueGreen Labs.
+ 
+ 

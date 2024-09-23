@@ -291,16 +291,12 @@ if [[ -z ${int} || ${int} == -* ]]; then
  int='30'
 fi
 
-if [ "${key}" ]; then
+if [ "${key}" == "TRUE" ]; then
   # print the content of the path to the
   # key and assign to a variable
   echo " NOTE: Using secure SFTP and key based logins!"
-  echo ""
-  has_key="TRUE"
  else
   echo " NOTE: No key will be generated, defaulting to insecure FTP!"
-  echo ""
-  has_key="FALSE"
 fi
 
 # Default to GMT time zone
@@ -335,7 +331,7 @@ command="
  echo ${saturation} >> /mnt/cfg1/settings.txt &&
  echo ${backlight} >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
- if [[ ${has_key} && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t ecdsa -s 521 -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
+ if [[ '${key}' == 'TRUE' && ! -f /mnt/cfg1/phenocam_key ]]; then dropbearkey -t ecdsa -s 521 -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
@@ -363,12 +359,20 @@ command="
  echo ' Hue: ${hue} | Contrast: ${contrast}' &&
  echo ' Saturation: ${saturation} | Backlight: ${backlight}' &&
  echo '' &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ----------------------------------'; fi &&
- echo '' &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' A key (pair) exists or was generated, please run:'; fi &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' ./PIT.sh ${ip} -r'; fi &&
- if [ -f /mnt/cfg1/phenocam_key ]; then echo ' to display/retrieve the current login key'; fi &&
- echo '' &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ' ----------------------------------'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ''; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ' NOTE:'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ' A key (pair) exists or was generated, please run:'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ' ./PIT.sh ${ip} -r'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ' to display/retrieve the current login key'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' == 'TRUE' ]]; then echo ''; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ' ----------------------------------'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ''; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ' WARNING:'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ' insecure FTP mode was selected but an sFTP key was found'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ' use ./PIT.sh ${ip} -x'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ' to purge this key and rerun the script to use FTP'; fi &&
+ if [[ -f /mnt/cfg1/phenocam_key && '${key}' != 'TRUE' ]]; then echo ''; fi &&
  echo '====================================================================' &&
  echo '' &&
  echo ' --> SUCCESSFUL UPLOAD OF THE INSTALLATION SCRIPT   <-- ' &&
