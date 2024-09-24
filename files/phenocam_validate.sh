@@ -50,6 +50,7 @@ do
     echo ""
   else
     echo "FAILED... secure sFTP login did not work"
+    echo "[data uploads will fall back to insecure FTP mode]"
     echo ""
   fi
   
