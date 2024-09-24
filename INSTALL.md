@@ -1,6 +1,6 @@
 # PhenoCam Installation Tool (PIT) v2
 
-PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu). Version 2 addresses the installation routine for the Stardot Netcam Live 2 cameras which supercede the previous default Netcam SC5 cameras within the PhenoCam network. This software is a collaboration between BlueGreen Labs (bv) and the PhenoCam US network. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
+PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu) or [ICOS](https://www.icos-cp.eu/) network. Version 2 addresses the installation routine for the Stardot Netcam Live2 cameras, which supercede the previous default Netcam SC5 cameras. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
 
 > [!warning]
 > The default password on the Stardot cameras is **INSECURE**. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min). Instructions on how to change the default password securely are provided in the instructions below. Follow these instructions step by step to ensure a secure install.
@@ -10,7 +10,7 @@ PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam
 > [!note]
 > Please read these instructions **carefully**, failing to do so might result in a poorly configured camera. Follow these instructions step-by-step for a successful PhenoCam install.
 
-Every PhenoCam needs to be added to the network (database) and approved using the site survey at the following link:
+Every PhenoCam US needs to be added to the network (database) and approved using the site survey at the following link:
 
 https://phenocam.nau.edu/webcam/sitesurvey/
 
@@ -69,7 +69,6 @@ To install your phenocam you will use the Phenocam Installation Tool (or PIT) sc
 | -s            | **first hour of the scheduled image acquisitions (e.g. 4 in the morning)** |
 | -e            | **last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation)** |
 | -m            | **interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30)** |
-| -k            | set sFTP key, TRUE if specified |
 | -r            | retrieve previously installed login keys from the camera |
 | -x            | purge all settings and scripts from the camera (soft reset) |
 | -u            | manually upload images to the server |
@@ -115,7 +114,8 @@ To complete the sFTP install you will have to email this (public) key file to ph
 
 > [!note]
 > Internally there is a fallback routine which uploads images via insecure FTP if the key is not validated. 
-> Note that with time the service will migrate to sFTP only. Please validate your key upon initial install.
+> With time the service will migrate to sFTP only. Please validate your key upon initial install or continued
+> service will not be guaranteed.
 
 #### 4.2 Uploading a test image manually
 
@@ -172,10 +172,10 @@ If a micro-SD card is inserted in the back of the camera all images will be back
 
 4. My camera is unresponsive, what should I do?
 
- - do a factory reset by pressing the recessed button on the back of the camera with a small metal rod
+ - reboot the camera by cycling the power or rebooting via the web interface
+ - when all else fails, do a factory reset by pressing the recessed button on the back of the camera with a small metal rod (note that this will require you to upload a new key)
 
 5. I want to run a custom setup, where do I find information?
 
- - the software only supports PhenoCam US and ICOS phenocams, for custom setups contanct BlueGreen Labs.
- 
+ - the software is provided AS IS and only supports PhenoCam US and ICOS phenocams, for custom setups contanct BlueGreen Labs.
  

@@ -48,7 +48,6 @@ do
   if [ $? -eq 0 ]; then
     echo "SUCCES... secure sFTP login worked"
     echo ""
-    service="sFTP"
   else
     echo "FAILED... secure sFTP login did not work"
     echo ""
@@ -58,3 +57,4 @@ do
   rm batchfile
 done
 
+exit 0
