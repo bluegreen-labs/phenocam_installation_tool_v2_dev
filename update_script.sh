@@ -13,13 +13,21 @@ chmod +x PIT.sh
 # move files into public repo
 if [ -d "../phenocam_installation_tool_v2/" ];
 then
- cp INSTALL.md ../phenocam_installation_tool_v2/README.md
- cp PITpass.sh ../phenocam_installation_tool_v2/
- mv PIT.sh ../phenocam_installation_tool_v2/
 
  cd ../phenocam_installation_tool_v2/
+
+ # checkout ICOS branch
+ git checkout main
+ #git push --set-upstream origin icos
+
+ # update files
+ cp ../phenocam_installation_tool_v2_dev/INSTALL.md README.md
+ cp ../phenocam_installation_tool_v2_dev/PITpass.sh .
+ mv ../phenocam_installation_tool_v2_dev/PIT.sh .
+ 
+ # push stuff to github
  git add PIT.sh
  git add PITpass.sh
- git commit -am "update PIT"
+ git commit -am "update PhenoCam US PIT"
  git push
 fi
