@@ -9,10 +9,10 @@
 #--------------------------------------------------------------------
 
 nrservers=`awk 'END {print NR}' /mnt/cfg1/server.txt`
-all="nau"
+all="icos"
 match=`grep -E ${all} /mnt/cfg1/server.txt | wc -l`
 
 if [ ${nrservers} -eq ${match} ];
 then
- echo "network=phenocam"
+ echo "network=icos"
 fi

@@ -26,7 +26,7 @@ model="NetCam Live2"
 
 # upload / download server - location from which to grab and
 # and where to put config files
-host='phenocam.nau.edu'
+host='icos01.uantwerpen.be'
 
 # create default server
 if [ ! -f '/mnt/cfg1/server.txt' ]; then
