@@ -326,7 +326,7 @@ command="
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 
  cp /var/tmp/files/* /mnt/cfg1/scripts &&
  rm -rf /var/tmp/files &&
- sh /mnt/cfg1/scripts/check_firmware.sh &&
+ sh /mnt/cfg1/scripts/check_firmware.sh || return 1 &&
  echo '#!/bin/sh' > /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
