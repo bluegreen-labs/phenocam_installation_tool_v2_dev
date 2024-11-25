@@ -17,8 +17,8 @@ then
  cd ../phenocam_installation_tool_v2/
 
  # checkout ICOS branch
- git checkout -b icos
- git push --set-upstream origin icos
+ git checkout icos
+ #git push --set-upstream origin icos
 
  # update files
  cp ../phenocam_installation_tool_v2_dev/INSTALL.md README.md
