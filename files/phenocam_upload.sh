@@ -180,11 +180,6 @@ rm vb*
 # create base meta-data file from configuration settings
 # and the fixed parameters
 echo "model=NetCam Live2" > /var/tmp/metadata.txt
-/mnt/cfg1/scripts/chls >> /var/tmp/metadata.txt
-echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
-echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
-echo "time_zone=$tz" >> /var/tmp/metadata.txt
-echo "overlay_text=$overlay_text" >> /var/tmp/metadata.txt
 
 # colour balance settings
 red=`awk 'NR==7' /mnt/cfg1/settings.txt`
@@ -196,6 +191,13 @@ hue=`awk 'NR==12' /mnt/cfg1/settings.txt`
 contrast=`awk 'NR==13' /mnt/cfg1/settings.txt`	 
 saturation=`awk 'NR==14' /mnt/cfg1/settings.txt`
 blc=`awk 'NR==15' /mnt/cfg1/settings.txt`
+network=`awk 'NR==16' /mnt/cfg1/settings.txt`
+
+echo "network=$network" >> /var/tmp/metadata.txt
+echo "ip_addr=$ip_addr" >> /var/tmp/metadata.txt
+echo "mac_addr=$mac_addr" >> /var/tmp/metadata.txt
+echo "time_zone=$tz" >> /var/tmp/metadata.txt
+echo "overlay_text=$overlay_text" >> /var/tmp/metadata.txt
 
 echo "red=$red" >> /var/tmp/metadata.txt
 echo "green=$green" >> /var/tmp/metadata.txt

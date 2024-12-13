@@ -87,6 +87,7 @@ usage() {
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
   [-m <interval minutes>]
+  [-d <destination> which network to use, either 'phenocam' or 'icos']
   [-u uploads images if specified, requires -i to be specified]
   [-v validate login credentials for sFTP transfers]
   [-r retrieves login key if specified, requires -i to be specified]
@@ -232,7 +233,7 @@ purge() {
 #---- parse arguments (and/or execute subroutine calls) ----
 
 # grab arguments
-while getopts "hi:p:n:o:s:e:m:uvrx" option;
+while getopts "hi:p:n:o:s:e:m:d:uvrx" option;
 do
     case "${option}"
         in
@@ -243,6 +244,7 @@ do
         s) start=${OPTARG} ;;
         e) end=${OPTARG} ;;
         m) int=${OPTARG} ;;
+        d) dest=${OPTARG} ;;
         u) upload ;;
         v) validate ;;
         r) retrieve ;;
@@ -274,6 +276,16 @@ if [[ -z ${offset} || ${offset} == -* ]]; then
  error_exit
 fi
 
+if [[ -z ${dest} || ${dest} == -* ]]; then
+ echo " WARNING: provided destination argument is empty"
+ error_exit
+fi
+
+if [[ ${dest} != "phenocam" || ${dest} != "icos" ]]; then
+ echo " WARNING: provided network option is not valid (should be phenocam or icos)"
+ error_exit
+fi
+
 if [[ -z ${start} || ${start} == -* ]]; then
  echo " NOTE: No start time (24h format) provided, using the default (9h)"
  start='9'
@@ -287,6 +299,13 @@ fi
 if [[ -z ${int} || ${int} == -* ]]; then
  echo " NOTE: No interval (in minutes) provided, using the default (30 min)"
  int='30'
+fi
+
+# Rename server variables to URLs
+if [[ ${dest} == "phenocam" ]]; then
+ url="phenocam.nau.edu"
+else
+ url="icos01.uantwerpen.be"
 fi
 
 # Default to GMT time zone
@@ -320,7 +339,9 @@ command="
  echo ${contrast} >> /mnt/cfg1/settings.txt &&
  echo ${saturation} >> /mnt/cfg1/settings.txt &&
  echo ${backlight} >> /mnt/cfg1/settings.txt &&
+ echo ${dest} >> /mnt/cfg1/settings.txt &&
  echo ${pass} > /mnt/cfg1/.password &&
+ echo ${url} > /mnt/cfg1/server.txt &&
  if [ ! -f /mnt/cfg1/phenocam_key ]; then dropbearkey -t ecdsa -s 521 -f /mnt/cfg1/phenocam_key >/dev/null; fi &&
  cd /var/tmp; cat | base64 -d | tar -x &&
  if [ ! -d '/mnt/cfg1/scripts' ]; then mkdir /mnt/cfg1/scripts; fi && 

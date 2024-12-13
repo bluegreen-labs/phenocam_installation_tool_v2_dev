@@ -65,6 +65,7 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	 contrast=`awk 'NR==13' /mnt/cfg1/settings.txt`	 
 	 saturation=`awk 'NR==14' /mnt/cfg1/settings.txt`
 	 blc=`awk 'NR==15' /mnt/cfg1/settings.txt`
+	 network=`awk 'NR==16' /mnt/cfg1/settings.txt`
 	else
 	 echo "Settings file missing, aborting install routine!" >> /var/tmp/install_log.txt
 	fi

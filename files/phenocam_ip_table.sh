@@ -34,9 +34,6 @@ cat /mnt/cfg1/scripts/site_ip.html | sed "s|DATETIME|$DATETIME|g" | sed "s|SITEI
 for i in $nrservers ;
 do
  SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt` 
-	
- # upload image
- echo "uploading NIR image ${image}"
  ftpput ${SERVER} -u "anonymous" -p "anonymous" data/${SITENAME}/${SITENAME}\_ip.html /var/tmp/${SITENAME}\_ip.html
 
 done
