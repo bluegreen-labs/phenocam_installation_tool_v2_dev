@@ -1,6 +1,6 @@
 ## PhenoCam Installation Tool (PIT) development repository
 
-This is the development repository of the [PhenoCam Installation Tool (v2)](). If you are looking to configure your PhenoCam **YOU SHOULD NOT** use this repository. This repository is here for code development and legal liability reasons only. If you want to configure your PhenoCam use the following repository:
+This is the development repository of the [PhenoCam Installation Tool (v2)](https://github.com/bluegreen-labs/phenocam_installation_tool_v2/). If you are looking to configure your PhenoCam **YOU SHOULD NOT** use this repository. This repository is here for code development and legal liability reasons only. If you want to configure your PhenoCam use the following repository:
 
 https://github.com/bluegreen-labs/phenocam_installation_tool_v2/
 
