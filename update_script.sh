@@ -27,6 +27,6 @@ then
  # push stuff to github
  git add PIT.sh
  git add PITpass.sh
- git commit -am "update PhenoCam US PIT"
+ git commit -am "update PhenoCam/ICOS PIT"
  git push
 fi

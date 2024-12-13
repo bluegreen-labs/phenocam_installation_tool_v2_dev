@@ -35,7 +35,6 @@ for i in $nrservers ;
 do
  SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt` 
  ftpput ${SERVER} -u "anonymous" -p "anonymous" data/${SITENAME}/${SITENAME}\_ip.html /var/tmp/${SITENAME}\_ip.html
-
 done
 
 # clean up

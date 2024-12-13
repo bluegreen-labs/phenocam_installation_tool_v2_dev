@@ -281,8 +281,8 @@ if [[ -z ${dest} || ${dest} == -* ]]; then
  error_exit
 fi
 
-if [[ ${dest} != "phenocam" || ${dest} != "icos" ]]; then
- echo " WARNING: provided network option is not valid (should be phenocam or icos)"
+if [[ "${dest}" != "phenocam" && "${dest}" != "icos" ]]; then
+ echo " WARNING: network option is not valid (should be 'phenocam' or 'icos')"
  error_exit
 fi
 
@@ -376,12 +376,15 @@ command="
  echo ' A key (pair) exists or was generated, please run:' &&
  echo ' ./PIT.sh -i ${ip} -r' &&
  echo ' to display/retrieve the current login key' &&
- echo ' and send this key to phenocam@nau.edu to complete the install.' &&
+ echo ' and send this key to phenocam@nau.edu to' &&
+ echo ' or phenocam@uantwerpen.be to complete the install.' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&
- echo ' --> SUCCESSFUL UPLOAD OF THE INSTALLATION SCRIPT   <-- ' &&
- echo ' --> THE CAMERA WILL REBOOT TO COMPLETE THE INSTALL <--' &&
+ echo ' --> SUCCESSFUL UPLOAD OF THE INSTALLATION SCRIPT' &&
+ echo ' --> THE CAMERA WILL REBOOT TO COMPLETE THE INSTALL' &&
+ echo ' --> THIS CONFIGURATION USES THE - ${dest} - NETWORK' &&
+ echo ' --> USING THE - ${url} - SERVER' &&
  echo '' &&
  echo ' [NOTE: the full install will take several reboot cycles (~5 min !!),' && 
  echo ' please wait before logging in or triggering the script again. The' &&

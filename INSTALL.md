@@ -2,8 +2,6 @@
 
 PhenoCam Installation Tool (PIT) is a set of scripts to configure Stardot Netcam Live 2 for the use as a phenocam associated with the [PhenoCam network](http://phenocam.nau.edu) or [ICOS](https://www.icos-cp.eu/) network. Version 2 addresses the installation routine for the Stardot Netcam Live2 cameras, which supercede the previous default Netcam SC5 cameras. It would be appreciated that if custom changes are required you hire BlueGreen Labs in a consulting context.
 
-For the ICOS network I refer to the [ICOS branch](https://github.com/bluegreen-labs/phenocam_installation_tool_v2/tree/icos) of the software, which should be used instead of the main branch. Although largely the same, please consult the ICOS branch instructions for further details.
-
 > [!warning]
 > The default password on the Stardot cameras is **INSECURE**. Connecting any camera to an open network, without a firewall, will result in your camera being hacked (with [estimated times to infection](https://www.pcgamer.com/hardware/a-windows-xp-machines-life-expectancy-in-2024-seems-to-be-about-10-minutes-before-even-just-an-idle-net-connection-renders-it-a-trojan-riddled-zombie-pc/) ~ 10 min). Instructions on how to change the default password securely are provided in the instructions below. Follow these instructions step by step to ensure a secure install.
 
@@ -71,6 +69,7 @@ To install your phenocam you will use the Phenocam Installation Tool (or PIT) sc
 | -s            | **first hour of the scheduled image acquisitions (e.g. 4 in the morning)** |
 | -e            | **last hour of the scheduled image acquisitions (e.g. ten at night, so 22 in 24-h notation)** |
 | -m            | **interval minutes, at which to take pictures (e.g. 15, every 15 minutes - default phenocam setting is 30)** |
+| -d            | **destination of the images, either the 'phenocam' or 'icos' network** |
 | -r            | retrieve previously installed login keys from the camera |
 | -x            | purge all settings and scripts from the camera (soft reset) |
 | -u            | manually upload images to the server |
@@ -84,19 +83,26 @@ To install your phenocam you will use the Phenocam Installation Tool (or PIT) sc
 To configure a camera for the GMT+1 time zone taking pictures every 30 minutes between nine (9) in the morning and ten (22) at night you would use the following command. Note that you also need to specify your IP address, and password and the camera name you used in the site survey (see above). **You will be asked for the password again when logging in using SSH, this is normal!**
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -p password -n testcam -o +1 -s 9 -e 22 -m 30
+# PhenoCam US network
+./PIT.sh -i 192.168.1.xxx -p password -n testcam -o +1 -s 9 -e 22 -m 30 -d 'phenocam'
+
+# ICOS Europe
+./PIT.sh -i 192.168.1.xxx -p password -n testcam -o +1 -s 9 -e 22 -m 30 -d 'icos'
+
+# I will be using the PhenoCam US network in all the below examples, adjust
+# your commands if you are working on the ICOS network
 ```
 
 Note, any dash (-) needs to be quoted and escaped when providing it as a parameters. As such, negative GMT offsets need to use the escape character \ as shown below:
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -p password -n testcam -o "\-1" -s 9 -e 22 -m 30
+./PIT.sh -i 192.168.1.xxx -p password -n testcam -o "\-1" -s 9 -e 22 -m 30 -d 'phenocam'
 ```
 
 Similarly, using a dash in your password would require the following structure:
 
 ```bash
-./PIT.sh -i 192.168.1.xxx -p "my\-password" -n testcam -o "\-1" -s 9 -e 22 -m 30
+./PIT.sh -i 192.168.1.xxx -p "my\-password" -n testcam -o "\-1" -s 9 -e 22 -m 30 -d 'phenocam'
 ```
 
 To retrieve the current login key to use when using sFTP use:
