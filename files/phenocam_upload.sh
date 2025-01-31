@@ -242,7 +242,36 @@ do
   SERVER=`awk -v p=$i 'NR==p' /mnt/cfg1/server.txt`
   echo "uploading to: ${SERVER}"
   echo ""
+  
+  # -------------- VALIDATE SERVICE --------------------------------
+  # check if sFTP is reachable
+
+  # set the default service
+  service="FTP"
+
+  if [ -f "/mnt/cfg1/phenocam_key" ]; then
+
+   echo "An sFTP key was found, checking login credentials..."
+
+   echo "exit" > batchfile
+   sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
+
+   # if status output last command was
+   # 0 set service to sFTP
+   if [ $? -eq 0 ]; then
+    echo "SUCCES... using secure sFTP"
+    echo ""
+    service="sFTP"
+   else
+    echo "FAILED... falling back to FTP!"
+    echo ""
+   fi
  
+   # clean up
+   rm batchfile
+  fi
+  # -------------- VALIDATE SERVICE END -----------------------------
+
   # if key file exists use SFTP
   if [ "${service}" != "FTP" ]; then
    echo "using sFTP"
