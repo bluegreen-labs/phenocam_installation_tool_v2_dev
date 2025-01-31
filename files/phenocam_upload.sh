@@ -134,36 +134,6 @@ if [ "$SDCARD" -eq 1 ]; then
  
 fi
 
-# -------------- VALIDATE SERVICE -----------------------------------
-
-# check if sFTP is reachable, even if a keys provided it might not be
-# validated yet - fall back to FTP if sFTP is not available (yet)
-
-# set the default service
-service="FTP"
-
-if [ -f "/mnt/cfg1/phenocam_key" ]; then
-
- echo "An sFTP key was found, checking login credentials..."
-
- echo "exit" > batchfile
- sftp -b batchfile -i "/mnt/cfg1/phenocam_key" phenosftp@${SERVER} >/dev/null 2>/dev/null
-
- # if status output last command was
- # 0 set service to sFTP
- if [ $? -eq 0 ]; then
-    echo "SUCCES... using secure sFTP"
-    echo ""
-    service="sFTP"
- else
-    echo "FAILED... falling back to FTP!"
-    echo ""
- fi
- 
- # clean up
- rm batchfile
-fi
-
 # -------------- SET FIXED DATE TIME HEADER -------------------------
 
 # overlay text
