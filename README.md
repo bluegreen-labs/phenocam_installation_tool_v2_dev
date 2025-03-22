@@ -21,6 +21,6 @@ It will put generate a `PIT.sh` file from the empty `PITe.sh` file, with the bin
 ## Licensing and legal
 
 > [!warning]
-> Due to the Internet-of-Things (IoT) nature of the code of the Phenocam Installation Tool (PIT) BlueGreen Labs (BV), as a small software developer, is forced to open this code to avoid costly litigation under the European Commission [Cyber Resilience Act (CRA)](https://en.wikipedia.org/wiki/Digital_Services_Act) should a user mess up and a device is used as a mallware vector. This code is therefore "open source" under an AGPLv3 license.
+> Due to the Internet-of-Things (IoT) nature of the code of the Phenocam Installation Tool (PIT) BlueGreen Labs (BV), as a small software developer, is forced to open this code to avoid costly litigation under the European Commission [Cyber Resilience Act (CRA)](https://en.wikipedia.org/wiki/Digital_Services_Act) should a user mess up and a device is used as a mallware vector. This code is therefore open source under an AGPLv3 license.
 >
 > This means that you are free to use the software and inspect the code, to be in compliance with the CRA. BlueGreen Labs (BV) therefore will not accept any liability in case abuse facilitated through camera devices. Please consult BlueGreen Labs (BV) for custom applications. Please support small software developers/consultants.
