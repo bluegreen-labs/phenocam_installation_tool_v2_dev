@@ -128,7 +128,16 @@ if [ `cat /mnt/cfg1/update.txt` = "TRUE" ]; then
 	/usr/sbin/set_rgb.sh 0 ${red} ${green} ${blue}
 
 	#----- generate random number between 0 and the interval value
-	rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+	
+	# get only argument for the script concerning
+	# fixing the schedule, convert to lower caps
+	fix=`echo $1 | awk '{print tolower($0)}'`
+		
+	if [[ "$fix" == "true" ]]; then
+	 rnumber=0
+	else
+	 rnumber=`awk -v min=0 -v max=${cron_int} 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
+	fi
 	
 	# divide 60 min by the interval
 	div=`awk -v interval=${cron_int} 'BEGIN {print 59/interval}'`

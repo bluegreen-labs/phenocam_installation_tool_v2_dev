@@ -87,6 +87,7 @@ usage() {
   [-s <start time 0-23>]
   [-e <end time 0-23>]  
   [-m <interval minutes>]
+  [-f <fix a non-random interval> logical TRUE or FALSE]
   [-d <destination> which network to use, either 'phenocam' or 'icos']
   [-u uploads images if specified, requires -i to be specified]
   [-v validate login credentials for sFTP transfers]
@@ -233,7 +234,7 @@ purge() {
 #---- parse arguments (and/or execute subroutine calls) ----
 
 # grab arguments
-while getopts "hi:p:n:o:s:e:m:d:uvrx" option;
+while getopts "hi:p:n:o:s:e:m:f:d:uvrx" option;
 do
     case "${option}"
         in
@@ -244,6 +245,7 @@ do
         s) start=${OPTARG} ;;
         e) end=${OPTARG} ;;
         m) int=${OPTARG} ;;
+        f) fix=${OPTARG} ;;
         d) dest=${OPTARG} ;;
         u) upload ;;
         v) validate ;;
@@ -301,6 +303,11 @@ if [[ -z ${int} || ${int} == -* ]]; then
  int='30'
 fi
 
+if [[ -z ${fix} || ${fix} == -* ]]; then
+ echo " NOTE: fixed interval randomization not set, using the default (FALSE)"
+ fix='FALSE'
+fi
+
 # Rename server variables to URLs
 if [[ ${dest} == "phenocam" ]]; then
  url="phenocam.nau.edu"
@@ -349,7 +356,7 @@ command="
  rm -rf /var/tmp/files &&
  sh /mnt/cfg1/scripts/check_firmware.sh || return 1 &&
  echo '#!/bin/sh' > /mnt/cfg1/userboot.sh &&
- echo 'sh /mnt/cfg1/scripts/phenocam_install.sh' >> /mnt/cfg1/userboot.sh &&
+ echo 'sh /mnt/cfg1/scripts/phenocam_install.sh ${fix}' >> /mnt/cfg1/userboot.sh &&
  echo 'sh /mnt/cfg1/scripts/phenocam_upload.sh' >> /mnt/cfg1/userboot.sh &&
  echo '' &&
  echo ' Successfully uploaded install instructions.' &&
@@ -361,6 +368,7 @@ command="
  echo ' Sitename: ${name} | Timezone: GMT${offset}' &&
  echo ' Upload start - end: ${start} - ${end} (h)' &&
  echo ' Upload interval: every ${int} (min)' &&
+ echo ' Fixed (non random) interval: ${fix}' &&
  echo '' &&
  echo ' And the following colour settings:' &&
  echo ' ----------------------------------' &&
@@ -376,8 +384,8 @@ command="
  echo ' A key (pair) exists or was generated, please run:' &&
  echo ' ./PIT.sh -i ${ip} -r' &&
  echo ' to display/retrieve the current login key' &&
- echo ' and send this key to phenocam@nau.edu to' &&
- echo ' or phenocam@uantwerpen.be to complete the install.' &&
+ echo ' and send this key to phenocam@nau.edu (Phenocam US) to' &&
+ echo ' or phenocam@uantwerpen.be (ICOS) to complete the install.' &&
  echo '' &&
  echo '====================================================================' &&
  echo '' &&
